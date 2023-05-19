@@ -1,0 +1,80 @@
+:root{
+  --primary-color: 0, 55, 117;
+  --secondary-color: 121, 179, 59;
+  --text-color: 19, 19, 19;
+  --background-color: 243, 243, 243;
+  --static-black-color: 19, 19, 19;
+  --static-white-color: 243, 243, 243;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/*------------------------------------------------*/
+/*button styles*/
+.btn{
+  border-radius: 4px;
+  padding: 0.65em 1.15em;
+  background-color: transparent;
+  color: rgb(var(--primary-color));
+  font-weight: bold;
+  border: none;
+}
+
+.btn:hover{
+  background-color: rgba(var(--primary-color), 0.2);
+}
+
+.btn.green{
+  color: rgb(var(--secondary-color));
+}
+
+.btn.green:hover{
+  background-color: rgba(var(--secondary-color), 0.2);
+}
+
+.btn.Class1{
+  background-color: rgb(var(--primary-color));
+  color: rgb(var(--static-white-color));
+}
+
+.btn.Class1.green{
+  background-color: rgb(var(--secondary-color));
+}
+
+.btn.Class1:hover{
+  background-color: rgba(var(--primary-color), 0.9);
+}
+
+.btn.Class1.green:hover{
+  background-color: rgba(var(--secondary-color), 0.8);
+}
+
+.btn.Class2{
+  padding: 0.5em 1em;
+  border: 0.2em solid rgb(var(--primary-color));
+}
+
+.btn.Class2.green{
+  border-color: rgb(var(--secondary-color));
+}
+
+.btn.Class3{
+  font-weight: normal;
+  text-decoration: underline;
+}
+
+/*------------------------------------------------*/
