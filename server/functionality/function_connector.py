@@ -9,7 +9,7 @@ from database import db_connector
 def use_plugin(pluginName:str, processID:int):
     """Load plugin module and execute it. Writes logfiles."""
     #load plugin
-    try: fnc_plugin = importlib.import_module("functionality.function_plugin.%s" % pluginName)
+    try: fnc_plugin = importlib.import_module("functionality.function_plugin.%s" % (pluginName))
     except: 
         print('Plugin not found: "%s".\n\nPlugin folder: functionality.function_plugin'%os.environ['DBMS'])
         db_connector.create('event_log', {
