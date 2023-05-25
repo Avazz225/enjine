@@ -8,7 +8,7 @@ import dotenv
 dotenv.load_dotenv()
 
 # load correct database plugin according to environment variable
-try: db_plugin = importlib.import_module("database.database_plugin.%s" % os.environ['DBMS'])
+try: db_plugin = importlib.import_module("database.database_plugin.%s" % (str(os.environ['DBMS'])))
 except: 
     print('Database plugin not found: "%s".\nEnsure that the environment variable "DBMS" corresponds to the plugin file name (excluding ".py"). \nPlugin folder: database.database_plugin'%os.environ['DBMS'])
     sys.exit(404)
