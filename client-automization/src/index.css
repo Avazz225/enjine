@@ -5,6 +5,20 @@
   --background-color: 243, 243, 243;
   --static-black-color: 19, 19, 19;
   --static-white-color: 243, 243, 243;
+  --error-color: 209, 0, 0;
+  --glassy: 0.05;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root{
+    --primary-color: 51, 130, 219;
+    --secondary-color: 121, 179, 59;
+    --text-color: 243, 243, 243;
+    --background-color: 19, 19, 19;
+    --static-black-color: 30, 30, 30;
+    --static-white-color: 243, 243, 243;
+    --glassy: 0.025;
+  }
 }
 
 body {
@@ -14,8 +28,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: rgb(var(--background-color));
+  color: rgb(var(--text-color));
 }
 
 code {
@@ -24,10 +38,76 @@ code {
 }
 
 /*------------------------------------------------*/
+/*general styles*/
+.blue{
+  color: rgb(var(--primary-color));
+}
+
+.centered{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error{
+  color: rgb(var(--error-color));
+  border-color: rgb(var(--error-color));
+}
+
+.flexWrapper{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.glassyCard{
+  background-color: rgba(var(--text-color), var(--glassy));
+  padding: 1em;
+  border-radius: 1em;
+}
+
+.green{
+  color: rgb(var(--secondary-color));
+}
+
+.heightCenter{
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.noTopSpace{
+  margin-top: -0.25em;
+}
+
+input{
+  background-color: transparent;
+  border-color: rgb(var(--text-color));
+  border-style: solid;
+  border-radius: 0.25em;
+  padding: 0.25em;
+  margin: 0em 0.25em;
+  color: rgb(var(--text-color));
+}
+
+.left{
+  text-align: left;
+  max-width: min-content;
+  line-height: 2em;
+}
+
+.right{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: max-content;
+}
+
+/*------------------------------------------------*/
 /*button styles*/
 .btn{
   border-radius: 4px;
   padding: 0.65em 1.15em;
+  margin: 0.1em;
   background-color: transparent;
   color: rgb(var(--primary-color));
   font-weight: bold;
@@ -49,10 +129,11 @@ code {
 .btn.Class1{
   background-color: rgb(var(--primary-color));
   color: rgb(var(--static-white-color));
-}
+}  
 
 .btn.Class1.green{
   background-color: rgb(var(--secondary-color));
+  color: rgb(var(--static-black-color));
 }
 
 .btn.Class1:hover{
@@ -75,6 +156,113 @@ code {
 .btn.Class3{
   font-weight: normal;
   text-decoration: underline;
+  color: unset;
+}
+
+/*------------------------------------------------*/
+/*href styles*/
+.href{
+  border-radius: 4px;
+  padding: 0.65em 1.15em;
+  margin: 0.1em;
+  background-color: transparent;
+  color: rgb(var(--primary-color));
+  border: none;
+  font-size: small;
+  cursor: default;
+}
+
+.href:hover{
+  background-color: rgba(var(--primary-color), 0.2);
+}
+
+.href.green{
+  color: rgb(var(--secondary-color));
+}
+
+.href.green:hover{
+  background-color: rgba(var(--secondary-color), 0.2);
+}
+
+.href.Class1{
+  background-color: rgb(var(--primary-color));
+  font-weight: bold;
+  color: rgb(var(--static-white-color));
+}
+
+.href.Class1.green{
+  background-color: rgb(var(--secondary-color));
+  color: rgb(var(--static-black-color));
+}
+
+.href.Class1:hover{
+  background-color: rgba(var(--primary-color), 0.9);
+}
+
+.href.Class1.green:hover{
+  background-color: rgba(var(--secondary-color), 0.8);
+}
+
+.href.Class2{
+  padding: 0.5em 1em;
+  font-weight: bold;
+  border: 0.2em solid rgb(var(--primary-color));
+}
+
+.href.Class2.green{
+  border-color: rgb(var(--secondary-color));
+}
+
+.href.Class3{
+  text-decoration: underline;
+  color: unset;
+}
+
+.href.Class3.noUnderline{
+  text-decoration: none;
+}
+
+/*------------------------------------------------*/
+/*page style*/
+.pageStructure{
+  display: flex;
+  flex-direction: row;
+}
+
+.content{
+  margin: 0.75em;
+}
+
+/*------------------------------------------------*/
+/*menu style*/
+.menuBackground{
+  background-color: rgba(var(--static-black-color));
+  color: rgb(var(--static-white-color));
+  padding: 0.5em;
+}
+
+.mainMenu{
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+}
+
+.sideMenu:before {
+  content: "";
+  position:absolute;
+  top: 0px;
+  left: 100%;
+  height:4em;
+  width: 4em;
+  border-top-left-radius: 50%;
+  background:none; 
+  box-shadow: 0 -2em 0 0 rgba(var(--static-black-color));
+  z-index: -10;
+}
+
+.sideMenu{
+  min-height: 93vh;
+  position: relative;
 }
 
 /*------------------------------------------------*/
