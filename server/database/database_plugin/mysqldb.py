@@ -36,8 +36,6 @@ def translateInsert(targetTable: str, newVals: dict) -> str:
     newVal = ""
 
     for item in newVals.items():
-        print(item[0])
-        print(item[1])
         insCols += "%s , " % (helpers.toStr(item[0]))
         newVal += "'%s', " % (helpers.toStr(item[1]))
 
@@ -49,7 +47,7 @@ def translateSelect(targetTable: str, pullParams: list, filter: dict) -> str:
     filters = ""
     params = ""
 
-    if type(filter) != str:
+    if filter != {}:
         for item in filter.items():
             filters += "%s = '%s' AND " % (helpers.toStr(item[0]), helpers.toStr(item[1]))
     else:

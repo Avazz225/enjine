@@ -1,12 +1,15 @@
+import { HrefClass1, HrefClass2 } from "../components/Href"
+
 function Landing(){
     return(
-        <div>
-            <button className="btn Class1">Test</button>
-            <button className="btn Class2">Test</button>
-            <button className="btn Class3">Test</button><br/><br/>
-            <button className="btn Class1 green">Test</button>
-            <button className="btn Class2 green">Test</button>
-            <button className="btn Class3 green">Test</button>
+        <div className="content">
+            <h1 className="blue noTopSpace">Schnelle Aktionen</h1>
+            <HrefClass1 text="On-/Offboarding"/> 
+            <HrefClass2 text="Aktuelle Prozesse einsehen"/>
+            <HrefClass2 text="Logdateien einsehen"/>
+            <br/><br/>
+            <h1 className="blue">Übersicht</h1>
+            Monitoring Stuff I guess @Maxim Schmaxim
         </div>
     )
 }

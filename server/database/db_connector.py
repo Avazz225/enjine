@@ -8,7 +8,7 @@ import dotenv
 dotenv.load_dotenv()
 
 # load correct database plugin according to environment variable
-try: db_plugin = importlib.import_module("database.database_plugin.%s" % os.environ['DBMS'])
+try: db_plugin = importlib.import_module("database.database_plugin.%s" % (str(os.environ['DBMS'])))
 except: 
     print('Database plugin not found: "%s".\nEnsure that the environment variable "DBMS" corresponds to the plugin file name (excluding ".py"). \nPlugin folder: database.database_plugin'%os.environ['DBMS'])
     sys.exit(404)
@@ -27,7 +27,7 @@ def read(targetTable: str, pullParams: list, filter: dict = {}, returnType: str 
 
     Uses a special module and translates the response to match the initially given dict format
     """
-    return tra_res.toDictList(rowSet = db_plugin.executeSelect(targetTable = targetTable, pullParams = pullParams, filter = filter, returnType = returnType), pullParams = pullParams)
+    return tra_res.toDictList(rowSet = db_plugin.executeSelect(targetTable = targetTable, pullParams = pullParams, filter = filter, returnType = returnType), pullParams = pullParams, returnType= returnType)
 
 def update(targetTable: str, newVals: dict, filter: dict) -> None:
     """Update data in the database."""

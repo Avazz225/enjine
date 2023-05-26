@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Landing from './landing_page/landing';
 import reportWebVitals from './reportWebVitals';
+import PageHandler from './page_handler';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Landing/>
+    <PageHandler/>
   </React.StrictMode>
 );
 
