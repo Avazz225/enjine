@@ -12,7 +12,7 @@ function BtnClass2(props){
 
 function BtnClass3(props){
     return(
-        <button onClick={() => props.action()} className="btn Class3 green">{props.text}</button>
+        <button onClick={() => props.action()} className={(props.noUnderline)?"btn Class3 green noUnderline":"btn Class3 green"}>{props.text}</button>
     )
 }
 

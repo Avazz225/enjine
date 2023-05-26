@@ -39,6 +39,13 @@ code {
 
 /*------------------------------------------------*/
 /*general styles*/
+.BGLogoContainer{
+  position: absolute;
+  z-index: -1;
+  opacity: 0.025;
+  max-height: 95vh;
+}
+
 .blue{
   color: rgb(var(--primary-color));
 }
@@ -91,8 +98,6 @@ input{
 
 .left{
   text-align: left;
-  max-width: min-content;
-  line-height: 2em;
 }
 
 .right{
@@ -100,6 +105,10 @@ input{
   flex-direction: column;
   align-items: flex-end;
   max-width: max-content;
+}
+
+.widthMax{
+  min-width: calc(100% - 7em);
 }
 
 /*------------------------------------------------*/
@@ -159,6 +168,10 @@ input{
   color: unset;
 }
 
+.btn.Class3.noUnderline{
+  text-decoration: none;
+}
+
 /*------------------------------------------------*/
 /*href styles*/
 .href{
@@ -188,6 +201,7 @@ input{
   background-color: rgb(var(--primary-color));
   font-weight: bold;
   color: rgb(var(--static-white-color));
+  text-decoration: none;
 }
 
 .href.Class1.green{
@@ -207,10 +221,15 @@ input{
   padding: 0.5em 1em;
   font-weight: bold;
   border: 0.2em solid rgb(var(--primary-color));
+  text-decoration: none;
 }
 
 .href.Class2.green{
   border-color: rgb(var(--secondary-color));
+}
+e
+.href.Class2.zeroTB{
+  padding: 0 1em;
 }
 
 .href.Class3{
@@ -220,6 +239,10 @@ input{
 
 .href.Class3.noUnderline{
   text-decoration: none;
+}
+
+.zeroTB{
+  padding: 0 1em;
 }
 
 /*------------------------------------------------*/
@@ -235,6 +258,46 @@ input{
 
 /*------------------------------------------------*/
 /*menu style*/
+.iconWrapper{
+  padding-top: 0.25em;
+}
+
+.logoContainer{
+  position:absolute;
+  max-width: 5em;
+  z-index: 11;
+  left: 1em;
+  top: 0.5em;
+}
+
+.logoutBG{
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  padding: 0.5em;
+  background-color: rgba(var(--text-color), var(--glassy));
+  border-radius: 8px;
+}
+
+.logoutContainer{
+  position: relative;
+  z-index: 1000;
+}
+
+.logoutSlave{
+  position: absolute;
+  min-width: max-content;
+  right: 0;
+  transform: scaleY(0);
+  transition: all 0.2s;
+  transform-origin: top;
+}
+
+.logoutContainer:hover .logoutSlave{
+  transform: scaleY(1);
+}
+
 .menuBackground{
   background-color: rgba(var(--static-black-color));
   color: rgb(var(--static-white-color));
@@ -245,6 +308,12 @@ input{
   display: flex;
   flex-direction: row;
   font-weight: bold;
+  padding-left: 7em;
+  justify-content: space-between;
+}
+
+.mainSlave{
+  padding-top: 0.375em;
 }
 
 .sideMenu:before {
@@ -261,8 +330,18 @@ input{
 }
 
 .sideMenu{
-  min-height: 93vh;
+  padding-top: 4em;
+  min-height: calc(100vh - 7.8em);
   position: relative;
+  min-width: 6em;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
 }
 
 /*------------------------------------------------*/
+/*login style*/
+.cardUnderlay{
+    background-color: rgb(var(--background-color));
+    border-radius: 1em;
+}

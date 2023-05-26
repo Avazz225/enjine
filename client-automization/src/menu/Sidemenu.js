@@ -6,7 +6,7 @@ function Menu(){
             <center>
                 Aktionen
             </center>
-            <BtnClass3 text='pimmel'/>
+            <BtnClass3 text='test'/>
         </div>
     )
 }
