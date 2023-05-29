@@ -19,6 +19,11 @@ def login():
 def createAcc():
     return account.newAccount(request.json, request.headers.get('Auth-Header'))
 
+@app.route('/accountProperties', methods = ['GET'])
+def accProps():
+    return account.getGenericProperties(request.headers.get('Auth-Header'))
+
+
 
 @app.after_request
 def after_request(response):
