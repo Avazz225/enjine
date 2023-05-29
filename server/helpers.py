@@ -97,3 +97,17 @@ def getID(token: str):
 def getRandomPassword(length:int) -> str:
     """Generates a secure random password with given length."""
     return ''.join((secrets.choice(string.printable) for i in range(length)))
+
+def getRights(id) -> dict:
+    """Reads assigned rights for user"""
+    return db_connector.read('permission', 
+                               ['sysAdmin', 
+                                'rightAdmin', 'rightGlobal', 'rightLocal',
+                                'pluginAdmin', 'pluginGlobal',
+                                'processAdmin', 'processGlobal',
+                                'userAdmin', 'userGlobal',
+                                'logAdmin', 'logGlobal',
+                                'groupAdmin', 'groupGlobal',
+                                'applicationAdmin', 'applicationGlobal'], 
+                               {'id': id}, 
+                               'one')

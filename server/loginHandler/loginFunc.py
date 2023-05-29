@@ -19,7 +19,7 @@ def loginHandler(data: json):
     token = getToken(id)
 
     # read assigned rights of the user from database
-    rights = getRights(id)
+    rights = helpers.getRights(id)
 
     return {'token': token, 'permissions': rights, 'remainingPwTime': remTime}, 200
 
@@ -39,20 +39,6 @@ def checkCreds(identifier: str, pw: str):
     else: 
         response = json.dumps({'message':'Invalid username'})
         return response, 404
-
-def getRights(id) -> dict:
-    """Reads assigned rights for user"""
-    return db_connector.read('permission', 
-                               ['sysAdmin', 
-                                'rightAdmin', 'rightGlobal', 'rightLocal',
-                                'pluginAdmin', 'pluginGlobal',
-                                'processAdmin', 'processGlobal',
-                                'userAdmin', 'userGlobal',
-                                'logAdmin', 'logGlobal',
-                                'groupAdmin', 'groupGlobal',
-                                'applicationAdmin', 'applicationGlobal'], 
-                               {'id': id}, 
-                               'one')
 
 def getToken(id: int) -> str:
     """Generates auth token and stores it to db"""
