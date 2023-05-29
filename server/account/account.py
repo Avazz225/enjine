@@ -4,28 +4,65 @@ import json
 from rightManagement import rightMgmt
 
 def newAccount(data, token):
+    """Handles creation of a new user account. Covers cases for creating an active user (can log into the program) and passive users (only logical objects). 
+    User objects are used in on- and offboarding."""
+
+    #check if the user has rights to execute the opration
     r = rightMgmt.approveUserManagement(token)
 
+    #if not: create warning in logs, return error message and rights
     if type(r) != bool:
         db_connector.create('event_log', {
                                         'processID': 0,
                                         'type':'warning',
-                                        'description':'Illegal access detected. User with id %s tried to create new user' % (r)
+                                        'description':'Illegal access detected. User with id %s tried to create new user' % (r['id'])
                                         })
-        response = json.dumps({'message':'Insufficient rights.'})
+        response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
         return response, 401
 
+    #read program configuration 
     duration = db_connector.read('client_config1',['initial_pw_duration'],{'id': 1}, 'one')['initial_pw_duration']
-    pwd = helpers.getRandomPassword(16)
 
     try:
-        db_connector.create('user', {'password': helpers.encryptPassword(pwd), 
-                                     'identifier': data['identifier'], 
-                                     'pw_last_set': helpers.getDate(), 
-                                     'pw_valid_until': helpers.getDate(duration)})
+        #if passive: create passive user (only identifier and configured properties)
+        if data['passive'] == 'True':
+            db_connector.create('user', {'identifier': data['identifier'], 
+                                                'active_account': 0,
+                                                'specific_properties' : data['specific_properties']})
+            response = json.dumps({'message':'Successful'})
+            return response, 200
+        else:
+            #create active user with random initial password, valid until and last set properties returns information and initial password
+            pwd = helpers.getRandomPassword(16)
+            db_connector.create('user', {'password': helpers.encryptPassword(pwd), 
+                                                'identifier': data['identifier'], 
+                                                'pw_last_set': helpers.getDate(), 
+                                                'pw_valid_until': helpers.getDate(duration),
+                                                'specific_properties' : data['specific_properties']})
+            response = json.dumps({'message':'Successful', 'password': pwd})
+            return response, 200
         
-        response = json.dumps({'message':'Successful', 'password': pwd})
-        return response, 200
+    #catch error (duplicate identifier)
     except:
-        response = json.dumps({'message':'Internal server error'})
+        response = json.dumps({'message':'Identifier already existing'})
         return  response, 500
+    
+def getGenericProperties(token):
+    """Returns generic properties of users, read from database. Used for user creation and configuration of user properties in general."""
+    #check if the user has rights to execute the opration
+    r = rightMgmt.approveUserManagement(token)
+
+    #if not: create warning in logs, return error message and rights
+    if type(r) != bool:
+        db_connector.create('event_log', {
+                                        'processID': 0,
+                                        'type':'warning',
+                                        'description':'Illegal access detected. User with id %s tried to read properties' % (r['id'])
+                                        })
+        response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
+        return response, 401
+    
+    #read program configuration 
+    props = db_connector.read('client_config1',['configurable_specific_properties'],{'id': 1}, 'one')['configurable_specific_properties']
+
+    return {'default_properties':props}, 200
