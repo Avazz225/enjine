@@ -39,6 +39,25 @@ code {
 
 /*------------------------------------------------*/
 /*general styles*/
+.accordeonWrapper{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
+.accordeonElem{
+  transform: scaleX(0);
+  width: 0;
+  transform-origin: right;
+  transition: all 0.5s ease-in-out;
+}
+
+.accordeonElem.visible{
+  transform: scaleX(1);
+  width: 50%;
+}
+
 .BGLogoContainer{
   position: absolute;
   z-index: -1;
@@ -63,8 +82,6 @@ code {
 
 .flexWrapper{
   display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .glassyCard{
@@ -82,8 +99,14 @@ code {
   justify-content: center;
 }
 
-.noTopSpace{
-  margin-top: -0.25em;
+.heightCenter.content{
+  margin: 0;
+  padding: 0;
+  min-height: 95vh;
+}
+
+.horCenter{
+  justify-content: center;
 }
 
 input{
@@ -96,8 +119,16 @@ input{
   color: rgb(var(--text-color));
 }
 
+img{
+  user-select: none;
+}
+
 .left{
   text-align: left;
+}
+
+.noTopSpace{
+  margin-top: -0.25em;
 }
 
 .right{
@@ -125,6 +156,10 @@ input{
 
 .btn:hover{
   background-color: rgba(var(--primary-color), 0.2);
+}
+
+.btn:disabled{
+  opacity: 0.5;
 }
 
 .btn.green{
@@ -160,6 +195,12 @@ input{
 
 .btn.Class2.green{
   border-color: rgb(var(--secondary-color));
+}
+
+@media (prefers-color-scheme: light) {
+  .btn.Class2.green{
+    color: rgb(var(--text-color));
+  }
 }
 
 .btn.Class3{
@@ -254,6 +295,7 @@ e
 
 .content{
   margin: 0.75em;
+  width: 100%;
 }
 
 /*------------------------------------------------*/
@@ -333,7 +375,7 @@ e
   padding-top: 4em;
   min-height: calc(100vh - 7.8em);
   position: relative;
-  min-width: 6em;
+  width: 6em;
   align-content: center;
   display: flex;
   flex-direction: column;
@@ -344,4 +386,91 @@ e
 .cardUnderlay{
     background-color: rgb(var(--background-color));
     border-radius: 1em;
+}
+
+/*------------------------------------------------*/
+/*table styles*/
+thead{
+  background-color: rgba(var(--text-color), 0.075);
+}
+
+thead tr th{
+  padding: 0.5em 1em;
+}
+
+tbody tr td{
+  padding: 0.25em;
+}
+
+tbody tr:nth-child(even){
+  background-color: rgba(var(--text-color), 0.04);
+}
+
+tr td:first-child{
+  border-radius: 0.5em 0 0 0.5em;
+}
+
+tr td:last-child{
+  border-radius: 0 0.5em 0.5em 0;
+}
+
+tr th:first-child{
+  border-radius: 0.5em 0 0 0.5em;
+}
+
+tr th:last-child{
+  border-radius: 0 0.5em 0.5em 0;
+}
+
+/*------------------------------------------------*/
+/*popup styles*/
+.popUp{
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+  backdrop-filter: blur(6px) grayscale(0.75);
+  opacity: 0;
+}
+
+.popUp.visible{
+  display: flex;
+  opacity: 1;
+}
+
+/*------------------------------------------------*/
+/*bubble styles*/
+.paramContainer{
+  display: flex;
+  flex-direction: row;
+  margin-right: 1em;
+}
+
+.paramContainer *{
+  margin: 0.25em;
+  background-color: rgba(var(--text-color), 0.04);
+}
+
+.paramContainer :first-child{
+  border-radius: 0.25em 0 0 0.25em;
+  padding: 0.3em;
+  margin: 0 0.125em 0 0;
+}
+
+.paramContainer :last-child{
+  border-radius: 0 0.25em 0.25em 0;
+  padding: 0.3em;
+  margin: 0 0 0 0.125em;
+}
+
+.closedBubble{
+  border-radius: 1em;
+  padding: 0.3em 1em;
+  margin: 0 0.125em 0.5em;
+  background-color: rgba(var(--primary-color), 0.25);
+  display: flex;
+  width: min-content;
 }
