@@ -7,6 +7,9 @@ import Login from './login_page/Login';
 import NotFound from './not_found/NotFound';
 import PWChanger from './pw_change_page/PWChanger';
 import { getCookie } from './helpers';
+import UserTable from './user_page/UserOverv';
+import PlugInMgmt from './plugins/PluginPage';
+import GroupManager from './group_page/GroupMgmt';
 
 function PageHandler(){
     let x = getCookie('token')
@@ -26,7 +29,10 @@ function LoggedIn(){
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<Landing />} />
+                    <Route path='/groupmgmt' element={<GroupManager />} />
+                    <Route path='/pluginmgmt' element={<PlugInMgmt />} />
                     <Route path='/pwmgmt' element={<PWChanger />} />
+                    <Route path='/usermgmt' element={<UserTable />} />
                     <Route path='/*' element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
