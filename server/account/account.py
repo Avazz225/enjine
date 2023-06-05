@@ -19,7 +19,10 @@ def newAccount(data, token):
                                         })
         response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
         return response, 401
-
+    else:
+        return accCreation(data), 200
+    
+def accCreation(data):
     #read program configuration 
     duration = db_connector.read('client_config1',['initial_pw_duration'],{'id': 1}, 'one')['initial_pw_duration']
 
@@ -34,11 +37,13 @@ def newAccount(data, token):
         else:
             #create active user with random initial password, valid until and last set properties returns information and initial password
             pwd = helpers.getRandomPassword(16)
-            db_connector.create('user', {'password': helpers.encryptPassword(pwd), 
+            id = db_connector.create('user', {'password': helpers.encryptPassword(pwd), 
                                                 'identifier': data['identifier'], 
                                                 'pw_last_set': helpers.getDate(), 
                                                 'pw_valid_until': helpers.getDate(duration),
                                                 'specific_properties' : data['specific_properties']})
+            
+            db_connector.create('permission',{'id':id})
             response = json.dumps({'message':'Successful', 'password': pwd})
             return response, 200
         
@@ -46,11 +51,11 @@ def newAccount(data, token):
     except:
         response = json.dumps({'message':'Identifier already existing'})
         return  response, 500
-    
+
 def getGenericProperties(token):
     """Returns generic properties of users, read from database. Used for user creation and configuration of user properties in general."""
     #check if the user has rights to execute the opration
-    r = rightMgmt.approveUserManagement(token)
+    r = rightMgmt.approvePropertyManagement(token)
 
     #if not: create warning in logs, return error message and rights
     if type(r) != bool:
