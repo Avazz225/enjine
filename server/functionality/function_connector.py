@@ -48,3 +48,18 @@ def use_plugin(pluginName:str, processID:int):
                                         'processID': processID
                                         })
         return True
+    
+def get_plugin_params(pluginName:str, processID:int):
+    """Load plugin module and execute it. Writes logfiles."""
+    #load plugin
+    try: fnc_plugin = importlib.import_module("functionality.function_plugin.%s" % (pluginName))
+    except: 
+        print('Plugin not found: "%s".\n\nPlugin folder: functionality.function_plugin'%os.environ['DBMS'])
+        db_connector.create('event_log', {
+                                        'type':'error',
+                                        'description':'Plugin not found. Plugin: "'+pluginName+'"',
+                                        'processID': processID
+                                        })
+
+    #read plugin config parameters
+    return fnc_plugin.getParams()
