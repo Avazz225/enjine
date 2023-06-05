@@ -65,6 +65,13 @@ code {
   max-height: 95vh;
 }
 
+@media (prefers-color-scheme: light){
+  .BGLogoContainer{
+    filter: invert(1);
+    opacity: 0.04;
+  }
+}
+
 .blue{
   color: rgb(var(--primary-color));
 }
@@ -320,6 +327,12 @@ e
   padding: 0.5em;
   background-color: rgba(var(--text-color), var(--glassy));
   border-radius: 8px;
+}
+
+@media (prefers-color-scheme: light){
+  .logoutBG{
+    background-color: rgba(var(--static-black-color), 0.95);
+  }
 }
 
 .logoutContainer{

@@ -1,6 +1,6 @@
 function BackgroundLogo(){
     return(
-        <img src="/ENJineLogo.svg" className="BGLogoContainer" alt="ENJine (ausgesprochen: Engine)" oncontextmenu="return false;"/>
+        <img src="/ENJineLogo.svg" className="BGLogoContainer" alt="ENJine (ausgesprochen: Engine)" onContextMenu={() => {return false}}/>
     )
 }
 
