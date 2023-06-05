@@ -487,3 +487,30 @@ tr th:last-child{
   display: flex;
   width: min-content;
 }
+
+/*------------------------------------------------*/
+/*information hover text styles*/
+
+.infoIcon{
+  color: rgb(var(--primary-color));
+}
+
+.helpText{
+  position: absolute;
+  display: inline-block;
+  transform: scaleY(0) scaleX(0);
+  transform-origin: 0 0;
+  transition: all 0.25s ease-in-out;
+  background-color: rgb(var(--background-color), 0.75);
+  padding: 0.5em;
+  border-radius: 4px;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+  border: solid 1px;
+  border-color: rgba(var(--primary-color), 0.5);
+  font-weight: normal;
+}
+
+.infoIcon:hover + .helpText{
+  transform: scaleY(1) scaleX(1);
+}

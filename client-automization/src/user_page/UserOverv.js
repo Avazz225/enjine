@@ -5,6 +5,7 @@ import lockReset from '@iconify/icons-mdi/lock-reset';
 import accountDetails from '@iconify/icons-mdi/account-details';
 import Pagy from '../components/Pagy';
 import { BtnClass2, BtnClass3 } from '../components/Btn';
+import informationIcon from '@iconify/icons-mdi/information';
 
 function ConfirmationPopUp(props){
     return(
@@ -13,6 +14,19 @@ function ConfirmationPopUp(props){
             <BtnClass2 text='Ja, zurücksetzen' action={props.forcePwdReset}/>
             <BtnClass3 text='Nein, nicht zurücksetzen' action={props.togglePopUpVisiblility}/>
         </div>
+    )
+}
+
+function Infobox(){
+    return(
+        <>
+        <span className="infoIcon"><Icon icon={informationIcon} /></span>
+        <div className="helpText">
+            Aktiv = Der User kann sich anmelden und mit dem Programm interagieren.<br/>
+            Passiv = Der User dient nur als Objekt für Prozesse, eine Anmeldung ist nicht möglich.<br/><br/>
+            Der Accounttyp kann nach Bedarf geändert werden.
+        </div>
+        </>
     )
 }
 
@@ -185,7 +199,7 @@ class UserTable extends React.Component{
                         <thead>
                             <tr>
                                 <th>Anmeldename</th>
-                                <th>Accounttyp</th>
+                                <th>Accounttyp <Infobox/></th>
                                 <th>Optionen</th>
                             </tr>
                         </thead>
