@@ -21,13 +21,13 @@ def create(targetTable: str, newVals: dict) -> int:
     """Insert data into the database."""
     return db_plugin.executeGeneric(operation = 'insert',targetTable = targetTable, newVals = newVals)
 
-def read(targetTable: str, pullParams: list, filter: dict = {}, returnType: str = '') -> list[dict]:
+def read(targetTable: str, pullParams: list, filter: dict = {}, returnType: str = '', count: dict={'limit':0, 'offset': 0}) -> list[dict]:
     """
     Retrieve data from the database.
 
     Uses a special module and translates the response to match the initially given dict format
     """
-    return tra_res.toDictList(rowSet = db_plugin.executeSelect(targetTable = targetTable, pullParams = pullParams, filter = filter, returnType = returnType), pullParams = pullParams, returnType= returnType)
+    return tra_res.toDictList(rowSet = db_plugin.executeSelect(targetTable = targetTable, pullParams = pullParams, filter = filter, returnType = returnType, count=count), pullParams = pullParams, returnType= returnType)
 
 def update(targetTable: str, newVals: dict, filter: dict) -> None:
     """Update data in the database."""
