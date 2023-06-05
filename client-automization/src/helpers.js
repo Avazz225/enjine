@@ -47,4 +47,9 @@ function setLocal(key, perms){
     localStorage.setItem(key,  JSON.stringify(perms))
 }
 
-export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal}
+function filterJsonArray(array, searchString) {
+    let lowercaseSearchString = searchString.toLowerCase();
+    return array.filter(obj => obj['name'].toLowerCase().includes(lowercaseSearchString));
+}
+
+export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray}

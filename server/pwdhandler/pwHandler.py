@@ -3,20 +3,19 @@ import json
 from database import db_connector
 from rightManagement import rightMgmt
 
-def changePwd(data: json, token:str, admReset:bool = False):
-    if admReset:
+def changePwd(data: json, token:str):
+    """Controls password change. """
+    if data['admReset'] == 'true':
         priv = rightMgmt.approveUserManagement(token)
         if type(priv) == bool:
             res = changeAdm(data['id'])
             db_connector.create('event_log', {
-                                    'processID': 0,
                                     'type':'information',
                                     'description':'User with id %s reset password for user with id %s.' % (helpers.getID(token), data['id'])
                                     })
             return res
         else:
             db_connector.create('event_log', {
-                                        'processID': 0,
                                         'type':'warning',
                                         'description':'Illegal access detected. User with id %s tried to reset password for user with id %s' % (priv, data['id'])
                                         })
@@ -26,7 +25,8 @@ def changePwd(data: json, token:str, admReset:bool = False):
         return changeSelf(data, token)
     
 def changeAdm(id:int):
-    row = db_connector.read('user', ['pw_history'], {'id': id, 'active_account': 1}, 'one')
+    """Handles change of passwords if it is initiated by an admin."""
+    row = db_connector.read('user', ['id','pw_history', 'password'], {'id': id, 'active_account': 1}, 'one')
     row2 = db_connector.read('client_config',['initial_pw_duration', 'old_pw_count'],{'id': 1}, 'one')
 
     try: history = row['pw_history'][1:(len(row['pw_history'])-1)].split(',')
@@ -34,7 +34,7 @@ def changeAdm(id:int):
 
     duration = row2['initial_pw_duration']
     count = row2['old_pw_count']
-    history = addToHistory(row['password'].encode('utf-8'), history, count)
+    history = addToHistory(row['password'], history, count)
 
     newPwd = helpers.getRandomPassword(16)
     db_connector.update('user', {'password': helpers.encryptPassword(newPwd), 'pw_valid_until': helpers.getDate(duration), 'pw_history': history}, {'id': row['id']})
@@ -43,6 +43,7 @@ def changeAdm(id:int):
     return response, 200
 
 def changeSelf(data: json, token:str):
+    """Handles change of passwords if it is initiated by the user."""
     oldPw = data['oldpw']
     newPw = data['newpw']
 
@@ -73,7 +74,7 @@ def changeSelf(data: json, token:str):
 
     count = row2['old_pw_count']
 
-    history = addToHistory(row['password'].encode('utf-8'), history, count)
+    history = addToHistory(row['password'], history, count)
 
     db_connector.update('user', {'password': helpers.encryptPassword(newPw), 'pw_valid_until': helpers.getDate(duration), 'pw_history': history}, {'id': row['id']})
 
@@ -82,7 +83,8 @@ def changeSelf(data: json, token:str):
 
 
 def addToHistory(pwd:str, history:list, oldPwCount:int) -> str:
+    """Adds a password to the password history. Removes the oldest one if oldPwCount would be exceeded."""
     if len(history) == oldPwCount:
         del history[0]
-
-    return str(history.append(pwd.decode('utf-8'))).replace("'",'')
+    history.append(str(pwd))
+    return str(history).replace("'",'')

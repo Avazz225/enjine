@@ -41,7 +41,8 @@ class PWChanger extends React.Component {
       // Create an object with the user's credentials
       const credentials = {
         oldpw: oldPW,
-        newpw: password
+        newpw: password,
+        admReset: 'False'
       };
   
       // Send the POST request to the backend

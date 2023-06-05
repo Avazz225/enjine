@@ -56,21 +56,27 @@ def toDictList(rowSet : list, pullParams: list, returnType: str) -> list[dict]:
     if returnType == 'one':
         temp = {}
         for i in range (len(pullParams)):
-            temp[pullParams[i]] = rowSet[i]
+            try:
+                temp[pullParams[i]] = json.loads(rowSet[i])
+            except:
+                temp[pullParams[i]] = rowSet[i]
         obj = temp
     else: 
         for row in rowSet:
             temp = {}
             for i in range (len(pullParams)):
-                temp[pullParams[i]] = row[i]
+                try:
+                    temp[pullParams[i]] = json.loads(row[i])
+                except:
+                    temp[pullParams[i]] = row[i]
             obj.append(temp)
     return obj
 
 def toStr(unsafeString: str) -> str:
     """Safely converts user inputs to strings and removes forbidden characters. Writes logs if forbidden chars are found."""
-    regex = fr"[^\s._0-9a-zA-z,\+*!?§$%&#-_;:.äöüÄÖÜß@€/\[\]]+"
+    regex = r"[^\s._0-9a-zA-z,\+*!?§$\"%&#-_;:.äöüÄÖÜß@€/\[\]]+\{\}"
     subst = " "
-    
+
     if re.search(regex, str(unsafeString)):
         safeString = re.sub(regex, subst, str(unsafeString), 0)
         db_values = {
@@ -88,7 +94,7 @@ def getID(token: str):
     """Gets userID from token."""
     row = db_connector.read('user', ['id', 'token_valid_until'], {'token': token, 'active_account': 1}, 'one')
 
-    if not row or dateComparisionTdy(row['token_valid_until'][1:(len(row['token_valid_until'])-1)].split(',')):
+    if not row or dateComparisionTdy(row['token_valid_until']):
         response = json.dumps({'message':'Token expired'})
         return response, 403
     
@@ -96,4 +102,36 @@ def getID(token: str):
 
 def getRandomPassword(length:int) -> str:
     """Generates a secure random password with given length."""
-    return ''.join((secrets.choice(string.printable) for i in range(length)))
+    return ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(length)))
+
+def getRights(id) -> dict:
+    """Reads assigned rights for user"""
+    return db_connector.read('permission', 
+                               ['sysAdmin', 
+                                'rightAdmin', 'rightGlobal', 'rightLocal',
+                                'pluginAdmin', 'pluginGlobal',
+                                'processAdmin', 'processGlobal',
+                                'userAdmin', 'userGlobal',
+                                'logAdmin', 'logGlobal',
+                                'groupAdmin', 'groupGlobal',
+                                'applicationAdmin', 'applicationGlobal'], 
+                               {'id': id}, 
+                               'one')
+
+#------------------------------------------------------------------------------
+#list management
+def remKeys(target: dict, comparision: dict) -> dict:
+    """Removes all keys from target not present in comparision"""
+    return {key: value for key, value in target.items() if key in comparision}
+
+def rmDictFromList(dictList: list, key:str, value: str) -> list:
+    """Removes all dicts from a list where the given key matches a given value"""
+    return [d for d in dictList if d.get(key) != value]
+
+def getDict(myList: list, key_to_match : str, value_to_match: str) -> dict:
+    """Returns all dicts in a list where given key matches a specific value."""
+    return next((d for d in myList if d.get(key_to_match) == value_to_match), None)
+
+def rmDictsNotInList(dictList:list, key:str, value_list:list):
+    """Removes all dicts from a list where the given key doesn't match any value in given list"""
+    return [d for d in dictList if d.get(key) in value_list]

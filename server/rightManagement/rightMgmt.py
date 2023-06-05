@@ -2,9 +2,86 @@ from database import db_connector
 import helpers
 
 def approveUserManagement(token:str): 
-    id = helpers.getID(token)
-    if type(id) != int: return id
+    """Checks whether a user is allowed to manage users. 
+    
+    Allowed groups:
+    - sysAdmin
+    - userAdmin"""
 
-    row = db_connector.read('permission', ['sysAdmin', 'userAdmin'], {'id': id}, 'one')
-    if bool(row['sysAdmin']) or bool(row['userAdmin']): return True
-    else: return id
+    return rightChecker(token, ['sysAdmin', 'userAdmin'])
+
+def approveUserGet(token:str): 
+    """Checks whether a user is allowed to see users. 
+    
+    Allowed groups:
+    - sysAdmin
+    - userAdmin
+    - userGlobal
+    - groupAdmin
+    - groupGlobal
+    """
+
+    return rightChecker(token, ['sysAdmin', 'userAdmin', 'userGlobal', 'groupAdmin', 'groupGlobal'], False)
+
+def approvePropertyManagement(token:str): 
+    """Checks whether a user is allowed to see properties. 
+    
+    Allowed groups:
+    - sysAdmin
+    - userAdmin"""
+
+    return rightChecker(token, ['sysAdmin', 'userAdmin'])
+
+def approvePluginGet(token:str):
+    """Checks whether a user is allowed to see plugins. 
+    
+    Allowed groups:
+    - sysAdmin
+    - pluginAdmin"""
+
+    return rightChecker(token, ['sysAdmin', 'pluginAdmin'])
+
+def approvePluginConfig(token:str):
+    """Checks whether a user is allowed to update plugin configurations. 
+    
+    Allowed groups:
+    - sysAdmin
+    - pluginAdmin"""
+
+    return rightChecker(token, ['sysAdmin', 'pluginAdmin'])
+
+def approveGroupGet(token:str):
+    """Checks whether a user is allowed to see groups. 
+    
+    Allowed groups:
+    - sysAdmin
+    - groupAdmin
+    - groupGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal'], False)
+
+def approveGroupAdd(token:str):
+    """Checks whether a user is allowed to add groups. 
+    
+    Allowed groups:
+    - sysAdmin
+    - groupAdmin
+    - groupGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal'], False)
+
+
+def rightChecker(token:str, perms:list, simpleResponse: bool = True):
+    """Checks if user is privilegrd for accessing function."""
+    id = helpers.getID(token)
+    if type(id) != int: return {'id':'Invalid token'}
+
+    row = db_connector.read('permission', perms, {'id': id}, 'one')
+
+    if any(value for value in row.values()):
+        if simpleResponse:
+            return True
+        else: 
+            return {'result':True, 'perms': row}
+    else: 
+        return {'id':id, 'rights':helpers.getRights(id)}

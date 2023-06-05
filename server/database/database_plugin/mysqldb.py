@@ -42,7 +42,7 @@ def translateInsert(targetTable: str, newVals: dict) -> str:
     query = "INSERT INTO %s (%s) VALUES (%s);" % (helpers.toStr(targetTable), insCols[:len(insCols)-2],  newVal[:len(newVal)-2])
     return query
 
-def translateSelect(targetTable: str, pullParams: list, filter: dict) -> str:
+def translateSelect(targetTable: str, pullParams: list, filter: dict, count: dict) -> str:
     """Handles translation of generic input to a SQL-SELECT statement."""
     filters = ""
     params = ""
@@ -56,8 +56,12 @@ def translateSelect(targetTable: str, pullParams: list, filter: dict) -> str:
     for par in pullParams:
         params += "%s, " % (helpers.toStr(par))
 
-    query = "SELECT %s FROM %s WHERE %s;" % (params[:len(params)-2], helpers.toStr(targetTable), filters[:len(filters)-4])
-    return query
+    query = "SELECT %s FROM %s WHERE %s" % (params[:len(params)-2], helpers.toStr(targetTable), filters[:len(filters)-4])
+
+    if count['limit'] > 0:
+        query += " LIMIT %s OFFSET %s" % (count['limit'], count['offset'])
+
+    return query + ';'
 
 def translateUpdate(targetTable: str, newVals: dict, filter: dict) -> str:
     """Handles translation of generic input to a SQL-UPDATE statement."""
@@ -106,10 +110,10 @@ def executeGeneric(operation: str, targetTable: str, filter: dict="", newVals: d
 
     return lastId
 
-def executeSelect(targetTable: str, pullParams: list, filter: dict="", returnType: str="all") -> list:  
+def executeSelect(targetTable: str, pullParams: list, filter: dict="", returnType: str="all", count: dict={'limit':0, 'offset': 0}) -> list:  
     """Starts the translation of generic input to a SQL-SELECT statement and executes the operation."""
 
-    query = translateSelect(targetTable, pullParams, filter)
+    query = translateSelect(targetTable, pullParams, filter, count)
 
     connection = getConnection()
     cursor = connection.cursor()

@@ -3,6 +3,9 @@ from flask_cors import CORS
 from loginHandler import loginFunc
 from account import account
 from pwdhandler import pwHandler
+from user import userFunc
+from plugin import pluginManager
+from groups import groupManager
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +21,34 @@ def login():
 @app.route('/newAccount', methods = ['PUT'])
 def createAcc():
     return account.newAccount(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/accountProperties', methods = ['GET'])
+def accProps():
+    return account.getGenericProperties(request.headers.get('Auth-Header'))
+
+@app.route('/getUsers', methods = ['POST'])
+def getU():
+    return userFunc.getUsers(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/getPlugIns', methods = ['GET'])
+def getPs():
+    return pluginManager.getPlugIns(request.headers.get('Auth-Header'))
+
+@app.route('/setPluginConfig', methods = ['UPDATE'])
+def setPs():
+    return pluginManager.setPluginConfig(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/refreshPlugIns', methods = ['UPDATE'])
+def refPs():
+    return pluginManager.refreshPlugIns(request.headers.get('Auth-Header'))
+
+@app.route('/getGroups', methods = ['GET'])
+def getGr():
+    return groupManager.getGroups(request.headers.get('Auth-Header'))
+
+@app.route('/addGroups', methods = ['POST'])
+def addGr():
+    return groupManager.addGroups(request.json, request.headers.get('Auth-Header'))
 
 
 @app.after_request
