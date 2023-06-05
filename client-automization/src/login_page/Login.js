@@ -91,7 +91,7 @@ class Login extends React.Component {
       const { identifier, password } = this.state;
   
       return (
-        <div className='flexWrapper heightCenter'>
+        <div className='centered heightCenter'>
             <BackgroundLogo/>
             <div className='cardUnderlay'>
               <div className='glassyCard'>
@@ -123,11 +123,12 @@ class Login extends React.Component {
                           onChange={this.handleChange}
                           autoComplete='current-password'
                           />
-                          <span className='error'>{this.state.pwErrorMessage}</span>
-                      </div><br/>
-                      <span className='error'>{this.state.serverErrorMessage}</span>
+                      </div>
+                      <span className='error'>{this.state.pwErrorMessage}</span><br/>
                       <center>
                           <button type="submit" className='btn Class1'>Login</button>
+                          <br/>
+                        <span className='error'>{this.state.serverErrorMessage}</span>
                       </center> 
                   </form>
                   </center>
