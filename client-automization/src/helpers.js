@@ -56,4 +56,20 @@ function timeout(delay) {
     return new Promise( res => setTimeout(res, delay) );
 }
 
-export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout}
+function transformPluginMappings(data) {
+    const transformedData = data.relations.map(relation => {
+        const plugin = data.plugins.find(p => p.id === relation.pid);
+        const programAndRight = data.programsAndRights.find(p => p.id === relation.prid);
+    
+        return {
+            id: relation.id,
+            pluginName: plugin ? plugin.name : '',
+            programAndRight: programAndRight ? programAndRight.name : '',
+            description: relation.description
+        };
+    });
+    
+    return transformedData;
+}
+
+export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout, transformPluginMappings}
