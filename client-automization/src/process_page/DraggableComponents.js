@@ -54,8 +54,8 @@ function DecisionComp(props){
     /*Decides which path to take, only one.*/
     return(
         <Draggable onStop={props.onStop} grid={[5, 5]}>
-            <div name={props.name} id={props.name} className='dragItemWrapper' >
-                <div className='dragItem diamond'><PlusSign name={props.name} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/></div>
+            <div name={props.name} className='dragItemWrapper' >
+                <div className='dragItem diamond' id={props.name} ><PlusSign name={props.name} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/></div>
             </div>
         </Draggable>
     )
@@ -65,8 +65,8 @@ function DecisionUniterComp(props){
     /*Waits for any input to be present before continue and executes all following tasks*/
     return(
         <Draggable onStop={props.onStop} grid={[5, 5]}>
-            <div name={props.name} id={props.name} className='dragItemWrapper'>
-                <div className='dragItem diamond' ><PlusSign name={props.name} rotated={true} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag} /></div>
+            <div name={props.name} className='dragItemWrapper'>
+                <div className='dragItem diamond' id={props.name} ><PlusSign name={props.name} rotated={true} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag} /></div>
             </div>
         </Draggable>
     )
