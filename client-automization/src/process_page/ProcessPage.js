@@ -1,8 +1,8 @@
+import WorkflowBuilder from "./WorkflowBuild"
+
 function ProcessPage(){
     return(
-        <div>
-
-        </div>
+        <WorkflowBuilder/>
     )
 }
 
