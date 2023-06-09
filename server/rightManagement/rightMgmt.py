@@ -71,6 +71,45 @@ def approveGroupAdd(token:str):
     return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal'], False)
 
 
+def approveProgGet(token:str):
+    """Checks whether a user is read application data.
+    
+    Allowed groups:
+    - sysAdmin
+    - applicationAdmin
+    - applicationGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal'], False)
+
+def approveProgRelCreate(token:str):
+    """Checks whether a user is allowed to create new relations between programs/rights and plugins. 
+    
+    Allowed groups:
+    - sysAdmin
+    - applicationAdmin
+    - applicationGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal'], False)
+
+def approveProgCreate(token:str):
+    """Checks whether a user is allowed to create new programs/rights. 
+    
+    Allowed groups:
+    - sysAdmin
+    - applicationAdmin
+    - applicationGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal'], False)
+
+def approveAppConfigUpdate(token:str):
+    """Checks whether a user is allowed to create new programs/rights. 
+    
+    Allowed groups:
+    - sysAdmin
+    - applicationAdmin"""
+
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin'], False)
+
 def rightChecker(token:str, perms:list, simpleResponse: bool = True):
     """Checks if user is privilegrd for accessing function."""
     id = helpers.getID(token)
