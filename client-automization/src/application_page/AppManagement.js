@@ -1,5 +1,5 @@
 import React from "react";
-import { getCookie, setLocal } from "../helpers";
+import { getCookie, setLocal, transformPluginMappings } from "../helpers";
 import { BtnClass2, BtnClass3 } from "../components/Btn";
 import AutocompleteInput from "../components/AutoCompleteInput";
 
@@ -150,22 +150,6 @@ const TableElement = ({data}) =>(
     </>
 )
 
-function transformData(data) {
-    const transformedData = data.relations.map(relation => {
-        const plugin = data.plugins.find(p => p.id === relation.pid);
-        const programAndRight = data.programsAndRights.find(p => p.id === relation.prid);
-    
-        return {
-            id: relation.id,
-            pluginName: plugin ? plugin.name : '',
-            programAndRight: programAndRight ? programAndRight.name : '',
-            description: relation.description
-        };
-    });
-    
-    return transformedData;
-}
-
 class AppManagement extends React.Component{
     constructor(props) {
         super(props);
@@ -210,7 +194,7 @@ class AppManagement extends React.Component{
             this.setState({
                 pluginAssignment: data['program_plugin'],
                 appConfig: data['appConf'],
-                mappedPluginAssignment: transformData(data['program_plugin']),
+                mappedPluginAssignment: transformPluginMappings(data['program_plugin']),
             })
         })
         .catch((error, data) => {
@@ -249,7 +233,7 @@ class AppManagement extends React.Component{
 
             this.setState({
                 pluginAssignment: temp,
-                mappedPluginAssignment: transformData(temp),
+                mappedPluginAssignment: transformPluginMappings(temp),
                 selectedPlugin: 0,
                 selectedRight: 0,
                 description: '',
