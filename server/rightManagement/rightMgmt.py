@@ -77,9 +77,12 @@ def approveProgGet(token:str):
     Allowed groups:
     - sysAdmin
     - applicationAdmin
-    - applicationGlobal"""
+    - applicationGlobal
+    - processAdmin
+    - processGlobal
+    """
 
-    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal'], False)
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal', 'processAdmin', 'processGlobal'], False)
 
 def approveProgRelCreate(token:str):
     """Checks whether a user is allowed to create new relations between programs/rights and plugins. 
