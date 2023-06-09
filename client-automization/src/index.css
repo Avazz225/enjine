@@ -151,6 +151,10 @@ img{
   margin-top: -0.25em;
 }
 
+.relPos{
+  position: relative;
+}
+
 .right{
   display: flex;
   flex-direction: column;
@@ -355,7 +359,6 @@ e
 
 .logoutContainer{
   position: relative;
-  z-index: 1000;
 }
 
 .logoutSlave{
@@ -365,6 +368,7 @@ e
   transform: scaleY(0);
   transition: all 0.2s;
   transform-origin: top;
+  z-index: 10000;
 }
 
 .logoutContainer:hover .logoutSlave{
@@ -472,6 +476,22 @@ tr th:last-child{
   opacity: 1;
 }
 
+.popUpBorder{
+  border: 1px solid;
+  border-radius: 1em;
+  border-color: rgb(var(--primary-color));
+  height: auto;
+  width: auto;
+  padding: 0.5em;
+  transform: translateY(2.7em);
+}
+
+.changingBG{
+  background-color: rgb(var(--background-color));
+  color: rgb(var(--text-color));
+  filter: drop-shadow(0px 4px 3px rgba(var(--static-black-color), 0.75));
+}
+
 /*------------------------------------------------*/
 /*bubble styles*/
 .paramContainer{
@@ -556,6 +576,7 @@ tr th:last-child{
   transform-origin: top;
   transition: all 0.25s ease-in-out;
   border-radius: 4px;
+  z-index: 100;
 }
 
 .autoCompleteList span{

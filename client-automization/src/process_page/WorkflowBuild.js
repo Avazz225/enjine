@@ -4,6 +4,7 @@ import { BtnClass2 } from '../components/Btn';
 import Xarrow from "react-xarrows";
 import Sticker from './Sticker';
 import { timeout } from '../helpers';
+import { getCookie, setLocal } from '../helpers';
 
 function TempArrow(props){
     return(
@@ -17,14 +18,49 @@ class WorkflowBuilder extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            dragObjects: [{id:0, name:'Start', type:'start'}, {id:1, name:'End', type:'end'}], 
+            dragObjects: [{id:0, name:'Start', type:'start', relatedPlugins: []}, {id:1, name:'End', type:'end', relatedPlugins: []}], 
             objectPositions: [{id:0,x:0,y:0}, {id:1,x:0,y:0}],
             connections: [],
             drag: false,
             previous: '',
+            pluginAssignment: [{}],
         };
 
         this.abortArrow = this.abortArrow.bind(this);
+    }
+
+    componentDidMount(){
+        fetch('http://127.0.0.1:5000/getPrograms', {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Auth-Header': getCookie('token')
+            },
+        })
+        .then((response) => {
+            // Check the response status
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.status, response.json());
+            }
+        })
+        .then((data) => {
+            // Handle the response
+            this.setState({
+                pluginAssignment: data['program_plugin'],
+            })
+        })
+        .catch((error, data) => {
+            if (error.message === '401') {
+                // Unauthorized
+                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
+                setLocal('userRights', data['rights'])
+            } else {
+                // Internal server error
+                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
+            }
+        });
     }
 
     async abortArrow() {
@@ -71,6 +107,15 @@ class WorkflowBuilder extends React.Component{
         }
     }
 
+    handleAppPluginToTask = (id, relatedPlugins) =>{
+        let temp = this.state.dragObjects
+        const index = temp.findIndex(obj => obj.id === id);
+        temp[index].relatedPlugins = relatedPlugins
+        this.setState({
+            dragObjects: temp
+        })
+    } 
+
     onStop = (e, ui) => {
         let temp = this.state.objectPositions
         let targetID = ui.node.attributes.name.value
@@ -85,7 +130,7 @@ class WorkflowBuilder extends React.Component{
     onAddComponent = (e) => {
         let temp = this.state.dragObjects
         let objectPositions = this.state.objectPositions
-        temp.push({id: this.state.dragObjects.length, name:'Test', type: e.target.name})
+        temp.push({id: this.state.dragObjects.length, name:'Task', type: e.target.name, relatedPlugins: []})
         objectPositions.push({id:this.state.dragObjects.length, x: 0, y:0})
         this.setState({
             dragObjects: temp,
@@ -103,11 +148,23 @@ class WorkflowBuilder extends React.Component{
                     <BtnClass2 text="Neuer Wartepunkt" name='interrupt' action={this.onAddComponent}/>
                     {(this.state.drag)?<TempArrow start={this.state.previous} abortArrow={this.abortArrow}/>:<></>}
                 </div>
+                {this.state.connections.map((item) => (
+                        <>
+                            <Xarrow
+                                start={String(item['previous'])}
+                                end={String(item['next'])}
+                                zIndex={100}
+                                color="rgb(100,100,100)"
+                                curveness={0.5}
+                                strokeWidth={3}
+                            />
+                        </>
+                ))}
                 <div className="dragContainer">
                     <StartPoint onStop= {this.onStop} name={0} handleArrowDrag={this.handleArrowDrag} /> 
                     {this.state.dragObjects.map((item) => (
                         <>
-                        {(item.type==='task')?<DraggableComp name={item['id']} onStop= {this.onStop} text={item['name']} handleArrowDrag={this.handleArrowDrag} handleArrowFinish={this.handleArrowFinish} handleTextChange={this.handleTextChange} />:
+                        {(item.type==='task')?<DraggableComp relatedPlugins={item.relatedPlugins} handleAppPluginToTask={this.handleAppPluginToTask} name={item['id']} onStop= {this.onStop} text={item['name']} handleArrowDrag={this.handleArrowDrag} handleArrowFinish={this.handleArrowFinish} handleTextChange={this.handleTextChange} pluginAssignment={this.state.pluginAssignment} />:
                         (item.type === 'decision')? <DecisionComp name={item['id']} onStop= {this.onStop} handleArrowDrag={this.handleArrowDrag} handleArrowFinish={this.handleArrowFinish}/>:
                         (item.type === 'parallel')? <DecisionUniterComp name={item['id']} onStop= {this.onStop} handleArrowDrag={this.handleArrowDrag} handleArrowFinish={this.handleArrowFinish}/>:
                         (item.type === 'interrupt')? <InterruptComp name={item['id']} onStop= {this.onStop} handleArrowDrag={this.handleArrowDrag} handleArrowFinish={this.handleArrowFinish}/>: <></>
@@ -115,18 +172,6 @@ class WorkflowBuilder extends React.Component{
                       </>
                     ))}
                     <EndPoint onStop= {this.onStop} name={1} handleArrowFinish={this.handleArrowFinish}/> 
-                    {this.state.connections.map((item) => (
-                        <>
-                            <Xarrow
-                                start={String(item['previous'])}
-                                end={String(item['next'])}
-                                zIndex={1000}
-                                color="rgb(100,100,100)"
-                                curveness={0.5}
-                                strokeWidth={3}
-                            />
-                        </>
-                    ))}
                 </div>
             </>
         )
