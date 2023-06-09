@@ -135,7 +135,8 @@ class GroupManager extends React.Component{
                 this.setState({
                     globalGroupData: data['global'],
                     localGroupData: data['local'],
-                    onlyLocal: data['onlyLocal']
+                    onlyLocal: data['onlyLocal'],
+                    serverErrorMessage: ''
                 })
             }
         })
@@ -181,7 +182,8 @@ class GroupManager extends React.Component{
             this.setState({
                 globalGroupData: temp,
                 addGlobalGroup: false,
-                globGroupName: ''
+                globGroupName: '',
+                serverErrorMessage: ''
             })
             
         })

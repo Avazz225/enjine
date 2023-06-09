@@ -49,9 +49,9 @@ const TableElement = ({data, openConfig}) =>(
         <tr key={data['id']}>
             <td>{data['name']}</td>
             <td className="flexWrapper">
-                <ParamElem data={data['params']}/>
+                {(data['params'])?<ParamElem data={data['params']}/>:<></>}
             </td>
-            {(data['id']!==0)?<td><button className="iconWrapper btn Class1 zeroTB" onClick={() => openConfig(data)}><Icon icon={pencilIcon} width='24'/></button></td>:<></>}
+            {(data['id']!==0 && data['params'])?<td><button className="iconWrapper btn Class1 zeroTB" onClick={() => openConfig(data)}><Icon icon={pencilIcon} width='24'/></button></td>:<></>}
         </tr>
     ))}
     </>
@@ -189,6 +189,7 @@ class PlugInMgmt extends React.Component{
     }
 
     render(){
+        console.log(this.state.filteredPluginData)
         return(
             <div className="content">
                 <h1 className="blue noTopSpace">Pluginkonfiguration</h1>

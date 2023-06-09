@@ -6,6 +6,7 @@ from pwdhandler import pwHandler
 from user import userFunc
 from plugin import pluginManager
 from groups import groupManager
+from applicationManagement import appManager
 
 app = Flask(__name__)
 CORS(app)
@@ -49,6 +50,26 @@ def getGr():
 @app.route('/addGroups', methods = ['POST'])
 def addGr():
     return groupManager.addGroups(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/getPrograms', methods = ['GET'])
+def getPr():
+    return appManager.getProgs(request.headers.get('Auth-Header'))
+
+@app.route('/addPrograms', methods = ['POST'])
+def addPr():
+    return appManager.addProg(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/createProgPlugRelation', methods = ['POST'])
+def createRel():
+    return appManager.createPRPR(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/createProgramRight', methods = ['POST'])
+def createPoR():
+    return appManager.createPR(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/updateAppConfig', methods = ['UPDATE'])
+def updateAC():
+    return appManager.updateAppConf(request.json, request.headers.get('Auth-Header'))
 
 
 @app.after_request

@@ -10,6 +10,8 @@ import { getCookie } from './helpers';
 import UserTable from './user_page/UserOverv';
 import PlugInMgmt from './plugins/PluginPage';
 import GroupManager from './group_page/GroupMgmt';
+import AppManagement from './application_page/AppManagement';
+import ProcessPage from './process_page/ProcessPage';
 
 function PageHandler(){
     let x = getCookie('token')
@@ -31,6 +33,8 @@ function LoggedIn(){
                     <Route path='/' element={<Landing />} />
                     <Route path='/groupmgmt' element={<GroupManager />} />
                     <Route path='/pluginmgmt' element={<PlugInMgmt />} />
+                    <Route path='/processmgmt' element={<ProcessPage />} />
+                    <Route path='/programmgmt' element={<AppManagement />} />
                     <Route path='/pwmgmt' element={<PWChanger />} />
                     <Route path='/usermgmt' element={<UserTable />} />
                     <Route path='/*' element={<NotFound />} />

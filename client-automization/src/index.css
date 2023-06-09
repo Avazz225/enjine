@@ -39,6 +39,10 @@ code {
 
 /*------------------------------------------------*/
 /*general styles*/
+.absPos{
+  position: absolute;
+}
+
 .accordeonWrapper{
   display: flex;
   flex-direction: row;
@@ -65,6 +69,13 @@ code {
   max-height: 95vh;
 }
 
+@media (prefers-color-scheme: light){
+  .BGLogoContainer{
+    filter: invert(1);
+    opacity: 0.04;
+  }
+}
+
 .blue{
   color: rgb(var(--primary-color));
 }
@@ -82,6 +93,11 @@ code {
 
 .flexWrapper{
   display: flex;
+  flex-wrap: wrap;
+}
+
+.flexWrapper.spaceAround{
+  justify-content: space-around;
 }
 
 .glassyCard{
@@ -119,6 +135,10 @@ input{
   color: rgb(var(--text-color));
 }
 
+input.number{
+  width: 3em;
+}
+
 img{
   user-select: none;
 }
@@ -138,6 +158,11 @@ img{
   max-width: max-content;
 }
 
+.spacer{
+  height: 0.5em;
+  width: 0.5em;
+}
+
 .widthMax{
   min-width: calc(100% - 7em);
 }
@@ -154,7 +179,7 @@ img{
   border: none;
 }
 
-.btn:hover{
+.btn:enabled:hover{
   background-color: rgba(var(--primary-color), 0.2);
 }
 
@@ -166,7 +191,7 @@ img{
   color: rgb(var(--secondary-color));
 }
 
-.btn.green:hover{
+.btn.green:enabled:hover{
   background-color: rgba(var(--secondary-color), 0.2);
 }
 
@@ -180,11 +205,11 @@ img{
   color: rgb(var(--static-black-color));
 }
 
-.btn.Class1:hover{
+.btn.Class1:enabled:hover{
   background-color: rgba(var(--primary-color), 0.9);
 }
 
-.btn.Class1.green:hover{
+.btn.Class1.green:enabled:hover{
   background-color: rgba(var(--secondary-color), 0.8);
 }
 
@@ -320,6 +345,12 @@ e
   padding: 0.5em;
   background-color: rgba(var(--text-color), var(--glassy));
   border-radius: 8px;
+}
+
+@media (prefers-color-scheme: light){
+  .logoutBG{
+    background-color: rgba(var(--static-black-color), 0.95);
+  }
 }
 
 .logoutContainer{
@@ -473,4 +504,185 @@ tr th:last-child{
   background-color: rgba(var(--primary-color), 0.25);
   display: flex;
   width: min-content;
+}
+
+/*------------------------------------------------*/
+/*information hover text styles*/
+.infoIcon{
+  color: rgb(var(--primary-color));
+}
+
+.helpText{
+  position: absolute;
+  display: inline-block;
+  transform: scaleY(0) scaleX(0);
+  transform-origin: 0 0;
+  transition: all 0.25s ease-in-out;
+  background-color: rgb(var(--background-color), 0.75);
+  padding: 0.5em;
+  border-radius: 4px;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+  border: solid 1px;
+  border-color: rgba(var(--primary-color), 0.5);
+  font-weight: normal;
+}
+
+.infoIcon:hover + .helpText{
+  transform: scaleY(1) scaleX(1);
+}
+
+/*------------------------------------------------*/
+/*autoComplete input styles*/
+.autoCompleteInputWrapper{
+  position: relative;
+}
+
+.autoCompleteInput:focus ~ .autoCompleteList{
+  transform: scaleY(1);
+}
+
+.autoCompleteList{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(var(--background-color), 0.75);
+  backdrop-filter: blur(4px);
+  border: solid 1px;
+  border-color: rgba(var(--primary-color), 0.5);
+  margin-top: 0.25em;
+  cursor: default;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: all 0.25s ease-in-out;
+  border-radius: 4px;
+}
+
+.autoCompleteList span{
+  padding: 0.25em 1em;
+}
+
+/*------------------------------------------------*/
+/*draggable styles*/
+.dragContainer{
+  width: 100%;
+  height: 90vh;
+  background-color: rgb(var(--static-white-color));
+  color: rgb(var(--static-black-color));
+  border-radius: 2em;
+  position: relative;
+  padding: 1em;
+  overflow: auto;
+  border: 1px dashed;
+  border-color: rgb(var(--static-black-color));
+  background-image: radial-gradient(rgba(var(--static-black-color), 0.15), 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.dragItem{
+  max-width: fit-content;
+  padding: 0.5em 1em;
+  border: 1px solid;
+  border-radius: 8px;
+  min-height: 1.25em;
+  position: absolute;
+  background-color: rgb(var(--static-white-color));
+}
+
+.dragItem.flexWrapper{
+  padding-right: 0;
+}
+
+.absPos .dragItem{
+  position: relative;
+}
+
+.dragItem:hover{
+  background-color: rgba(var(--primary-color), 0.25);
+}
+
+.dragItem.diamond{
+  background-color: rgba(var(--background-color), 0.075);
+  border-radius: 0;
+  min-width: 2.5em;
+  padding: 0;
+  min-height: 2.5em;
+  transform: rotateZ(45deg);
+}
+
+.DragRound{
+  height: 2em;
+  width: 2em;
+  border: 4px double;
+  border-radius: 2em;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(var(--static-white-color));
+}
+
+.DragRound.end{
+  border-width: 4px;
+  border-style: solid;
+}
+
+.DragRound.start{
+  height: calc(2em + 6px);
+  width: calc(2em + 6px);
+  border: 1px solid;
+  border-radius: 2em;
+  position: absolute;
+}
+
+.dragItemWrapper{
+  max-width: min-content;
+  position: absolute;
+}
+
+.dragItemWrapper .DragRound{
+  position: relative;
+}
+
+.plusWrapper{
+  position: relative;
+  height: 2.5em;
+  width: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plusWrapper.normalPlus{
+  transform: rotate(45deg);
+}
+
+.plusStroke{
+  min-width: 4px;
+  min-height: 1.75em;
+  background-color: rgb(var(--static-black-color));
+  position: absolute;
+}
+
+.plusWrapper :nth-child(2){
+  transform: rotate(90deg);
+}
+
+.connectionPoint{
+  background-color: rgba(var(--static-black-color), 0.25);
+  height: 1em;
+  width: 1em;
+  position: absolute;
+  left: calc(50% - 0.5em);
+  top: 100%;
+  border-radius: 50%;
+}
+
+.dragItem.diamond .connectionPoint{
+  left: 2.2em;
+  top: 2.2em
+}
+
+.xArrow{
+  color: aquamarine;
+  background-color: black;
 }
