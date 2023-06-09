@@ -52,4 +52,8 @@ function filterJsonArray(array, searchString) {
     return array.filter(obj => obj['name'].toLowerCase().includes(lowercaseSearchString));
 }
 
-export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray}
+function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+}
+
+export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout}
