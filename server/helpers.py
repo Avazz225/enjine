@@ -77,6 +77,9 @@ def toStr(unsafeString: str) -> str:
     regex = r"[^\s._0-9a-zA-z,\+*!?§$\"%&#-_;:.äöüÄÖÜß@€/\[\]]+\{\}"
     subst = " "
 
+    if type(unsafeString) == list:
+        unsafeString = json.dumps(unsafeString)
+
     if re.search(regex, str(unsafeString)):
         safeString = re.sub(regex, subst, str(unsafeString), 0)
         db_values = {
