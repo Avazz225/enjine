@@ -57,6 +57,7 @@ const TableElement = ({data, togglePopUpVisiblility}) =>(
     <>
     {data.map(data =>(
         <tr key={data['id']}>
+            <td>{data['id']}</td>
             <td>{data['identifier']}</td>
             <td>{(data['active_account'] === 1)?'Aktiv':'Passiv'}</td>
             <ResetPwd data={data} togglePopUpVisiblility={togglePopUpVisiblility} />
@@ -198,6 +199,7 @@ class UserTable extends React.Component{
                     <table>
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Anmeldename</th>
                                 <th>Accounttyp <Infobox/></th>
                                 <th>Optionen</th>
