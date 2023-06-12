@@ -26,7 +26,7 @@ def refreshController():
             configDict = helpers.remKeys(configDict, decriptionDict)
             decriptionDict = helpers.remKeys(decriptionDict, decriptionDict)
 
-            db_connector.update('plugin', {'params': json.dumps(configDict), 'params_description': json.dumps(decriptionDict)}, {'name': plugin})
+            db_connector.update('plugin', {'params': json.dumps(configDict, ensure_ascii=False), 'params_description': json.dumps(decriptionDict, ensure_ascii=False)}, {'name': plugin})
         else:
             db_connector.create('plugin', {'name': plugin, 'params': json.dumps(pluginDict[plugin]['params']), 'params_description': json.dumps(pluginDict[plugin]['descs'])})
 

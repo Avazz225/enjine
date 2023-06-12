@@ -55,7 +55,7 @@ const AppElement = ({data}) =>(
     <>
     {data.map(data =>(
         <div className="closedBubble" key={data['id']}>
-            {data['name']}
+            <span className="oneLine">{data['name']}</span>
         </div>
     ))}
     </>

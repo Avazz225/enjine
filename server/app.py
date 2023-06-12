@@ -7,6 +7,7 @@ from user import userFunc
 from plugin import pluginManager
 from groups import groupManager
 from applicationManagement import appManager
+from processManagement import processMgmt
 
 app = Flask(__name__)
 CORS(app)
@@ -71,6 +72,17 @@ def createPoR():
 def updateAC():
     return appManager.updateAppConf(request.json, request.headers.get('Auth-Header'))
 
+@app.route('/updateProcess', methods = ['UPDATE'])
+def updateProcess():
+    return processMgmt.updateProcess(request.json, request.headers.get('Auth-Header'))
+
+@app.route('/getAllProcesses', methods = ['GET'])
+def getProcesses():
+    return processMgmt.getProcess('',request.headers.get('Auth-Header'))
+
+@app.route('/getProcess', methods = ['GET'])
+def getProcess():
+    return processMgmt.getProcess(request.args.get('target'),request.headers.get('Auth-Header'))
 
 @app.after_request
 def after_request(response):

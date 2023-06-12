@@ -7,6 +7,7 @@ import { BtnClass2, BtnClass3 } from "../components/Btn";
 import AutocompleteInput from "../components/AutoCompleteInput";
 
 class DraggableComp extends React.Component{
+    //executes a task, max 1 in- and output for correct handling. Alternations possible at own risk.
     constructor(props) {
         super(props);
         this.state = {
@@ -57,7 +58,12 @@ class DraggableComp extends React.Component{
 
     handleAppPluginToTask = () =>{
         let temp= this.state.referencedPluginData
-        temp.push({id: temp.length, pluginID: this.getPid(), referenceID: this.state.selectedRelation})
+        let id = 0
+        try{id = (Number(temp[temp.length - 1].id)+1)}
+        catch {}
+        temp.push({id: id, pluginID: this.getPid(), referenceID: this.state.selectedRelation})
+
+        console.log(temp)
 
         this.props.handleAppPluginToTask(this.state.objectID, temp)
         this.setState({
@@ -97,16 +103,16 @@ class DraggableComp extends React.Component{
 
     render(){
         return(
-            <Draggable onStop={this.props.onStop} grid={[5, 5]}>
+            <Draggable onStop={this.props.onStop} grid={[5, 5]} defaultPosition={{x: this.props.objectPosition.x, y: this.props.objectPosition.y}}>
                 <div name={this.props.name} id={this.props.name} className='absPos'>
-                    <div className="dragItem flexWrapper" name={this.props.name} onMouseUpCapture={(e) => this.props.handleArrowFinish(e)}>
+                    <div className="dragItem flexWrapper" name={this.props.name} onMouseUpCapture={(this.props.maxInboundConn <= this.props.inboundConn)?() => {} :(e) => this.props.handleArrowFinish(e)}>
                         <div contentEditable suppressContentEditableWarning={true} name={this.props.name} onBlur={(e) => this.props.handleTextChange(e)}>
                             {this.props.text}
                         </div>
                         <div className="spacer"/>
                         <Icon icon={menuIcon} width={24} onClick={this.toggleAssigner}/>
                     </div>
-                    <ConnectionPoint name={this.props.name} handleArrowDrag={this.props.handleArrowDrag}/>
+                    {(this.props.maxOutboundConn <= this.props.outboundConn)?<></>:<ConnectionPoint name={this.props.name} handleArrowDrag={this.props.handleArrowDrag}/>}
                     <Assigner 
                         assigner={this.state.assigner} 
                         mappedData={this.dataMapper(this.state.pluginAssignment, this.state.referencedPluginData)} 
@@ -187,51 +193,64 @@ const TableElement = ({data}) =>(
 )
 
 function StartPoint(props){
+    //starts a process, max 1 output for correct handling. Alternations possible at own risk.
     return(
-        <Draggable onStop={props.onStop} grid={[5, 5]}>
-            <div name={props.name} id={props.name} className='DragRound start'><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/></div>
+        <Draggable onStop={props.onStop} grid={[5, 5]} defaultPosition={{x: props.objectPosition.x, y: props.objectPosition.y}}>
+            <div name={props.name} id={props.name} className='DragRound start'>
+                {(props.maxOutboundConn <= props.outboundConn)?<></>:<ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/>}
+            </div>
         </Draggable>
     )
 }
 
 function EndPoint(props){
+    //ends a process, max 1 input for correct handling. Alternations possible at own risk.
     return(
-        <Draggable name={props.name} onStop={props.onStop} grid={[5, 5]}>
-            <div name={props.name} id={props.name} onMouseUpCapture={(e) => props.handleArrowFinish(e)} className='DragRound end'></div>
+        <Draggable name={props.name} onStop={props.onStop} grid={[5, 5]} defaultPosition={{x: props.objectPosition.x, y: props.objectPosition.y}}>
+            <div name={props.name} id={props.name} onMouseUpCapture={(props.maxInboundConn <= props.inboundConn)?() => {} :(e) => props.handleArrowFinish(e)} className='DragRound end'></div>
         </Draggable>
     )
 }
 
 function InterruptComp(props){
+    //waits for a manual action, max 1 in- and output for correct handling. Alternations possible at own risk.
     return(
-        <Draggable onStop={props.onStop} grid={[5, 5]}>
+        <Draggable onStop={props.onStop} grid={[5, 5]} defaultPosition={{x: props.objectPosition.x, y: props.objectPosition.y}}>
             <div name={props.name} id={props.name} className='dragItemWrapper'>
-                <div name={props.name} id={props.name} onMouseUpCapture={(e) => props.handleArrowFinish(e)} className='DragRound'>
-                    <Icon icon={accountIcon} width={26} name={props.name} id={props.name} onMouseUpCapture={(e) => props.handleArrowFinish(e)}/>
+                <div name={props.name} id={props.name} onMouseUpCapture={(props.maxInboundConn <= props.inboundConn)?() => {} :(e) => props.handleArrowFinish(e)} className='DragRound'>
+                    <Icon icon={accountIcon} width={26} name={props.name} id={props.name}/>
                 </div>
-                <ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/>
+                {(props.maxOutboundConn <= props.outboundConn)?<></>:<ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/>}
             </div>
         </Draggable>
     )
 }
 
 function DecisionComp(props){
-    /*Decides which path to take, only one.*/
+    /*Decides which path to take, only one. 
+    Max 1 input and 2 outputs for correct handling. Alternations possible at own risk.*/
     return(
-        <Draggable onStop={props.onStop} grid={[5, 5]}>
+        <Draggable onStop={props.onStop} grid={[5, 5]} defaultPosition={{x: props.objectPosition.x, y: props.objectPosition.y}}>
             <div name={props.name} className='dragItemWrapper' >
-                <div className='dragItem diamond' id={props.name} ><PlusSign name={props.name} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/></div>
+                <div className='dragItem diamond' id={props.name} onMouseUpCapture={(props.maxInboundConn <= props.inboundConn)?() => {} :(e) => props.handleArrowFinish(e)}>
+                    <PlusSign name={props.name}/>
+                    {(props.maxOutboundConn <= props.outboundConn)?<></>:<ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/>}
+                </div>
             </div>
         </Draggable>
     )
 }
 
-function DecisionUniterComp(props){
-    /*Waits for any input to be present before continue and executes all following tasks*/
+function ParallelComp(props){
+    /*Waits for any input to be present before continue and executes all following tasks.
+    Max 2 in- and outputs with a maximum of 3 connections for correct handling. Alternations possible at own risk.*/
     return(
-        <Draggable onStop={props.onStop} grid={[5, 5]}>
+        <Draggable onStop={props.onStop} grid={[5, 5]} defaultPosition={{x: props.objectPosition.x, y: props.objectPosition.y}}>
             <div name={props.name} className='dragItemWrapper'>
-                <div className='dragItem diamond' id={props.name} ><PlusSign name={props.name} rotated={true} handleArrowFinish={props.handleArrowFinish} /><ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag} /></div>
+                <div className='dragItem diamond' id={props.name} onMouseUpCapture={(props.maxInboundConn <= props.inboundConn | props.maxConn <= props.outboundConn + props.inboundConn)?() => {} :(e) => props.handleArrowFinish(e)}>
+                    <PlusSign name={props.name} rotated={true} />
+                    {(props.maxOutboundConn <= props.outboundConn | props.maxConn <= props.outboundConn + props.inboundConn)?<></>:<ConnectionPoint name={props.name} handleArrowDrag={props.handleArrowDrag}/>}
+                </div>
             </div>
         </Draggable>
     )
@@ -239,7 +258,7 @@ function DecisionUniterComp(props){
 
 function PlusSign(props){
     return(
-        <div className={(props.rotated)?'plusWrapper normalPlus':'plusWrapper'} name={props.name} onMouseUpCapture={(e) => props.handleArrowFinish(e)}>
+        <div className={(props.rotated)?'plusWrapper normalPlus':'plusWrapper'} name={props.name}>
             <div className='plusStroke'/>
             <div className='plusStroke'/>
         </div>
@@ -252,4 +271,4 @@ function ConnectionPoint (props) {
     )
 }
 
-export {DraggableComp, StartPoint, EndPoint, DecisionComp, DecisionUniterComp, InterruptComp}
+export {DraggableComp, StartPoint, EndPoint, DecisionComp, ParallelComp, InterruptComp}
