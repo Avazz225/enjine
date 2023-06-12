@@ -78,7 +78,7 @@ def toStr(unsafeString: str) -> str:
     subst = " "
 
     if type(unsafeString) == list:
-        unsafeString = json.dumps(unsafeString)
+        unsafeString = json.dumps(unsafeString, ensure_ascii=False)
 
     if re.search(regex, str(unsafeString)):
         safeString = re.sub(regex, subst, str(unsafeString), 0)
