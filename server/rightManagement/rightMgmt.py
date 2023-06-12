@@ -105,13 +105,33 @@ def approveProgCreate(token:str):
     return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal'], False)
 
 def approveAppConfigUpdate(token:str):
-    """Checks whether a user is allowed to create new programs/rights. 
+    """Checks whether a user is allowed to update the application configuration. 
     
     Allowed groups:
     - sysAdmin
     - applicationAdmin"""
 
     return rightChecker(token, ['sysAdmin', 'applicationAdmin'], False)
+
+def approveProcessDefUpdate(token:str):
+    """Checks whether a user is allowed to define processes. 
+    
+    Allowed groups:
+    - sysAdmin
+    - processAdmin
+    - processGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'processAdmin', 'processGlobal'], False)
+
+def approveProcessGet(token: str):
+    """Checks whether a user is allowed to read processes. 
+    
+    Allowed groups:
+    - sysAdmin
+    - processAdmin
+    - processGlobal"""
+
+    return rightChecker(token, ['sysAdmin', 'processAdmin', 'processGlobal'], False)
 
 def rightChecker(token:str, perms:list, simpleResponse: bool = True):
     """Checks if user is privilegrd for accessing function."""
