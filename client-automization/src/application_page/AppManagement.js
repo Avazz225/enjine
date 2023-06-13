@@ -174,123 +174,22 @@ class AppManagement extends React.Component{
     }
 
     componentDidMount(){
-        fetch('http://127.0.0.1:5000/getPrograms', {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
+        let data = {"program_plugin": {"plugins": [{"id": 6, "name": "gmail", "params": {"recipient": null, "CC-recipient": null, "topic": null, "text": null, "replacementValues": null}}], "programsAndRights": [{"id": 1, "name": "BSP1"}, {"id": 2, "name": "BSP2"}, {"id": 5, "name": "E-Mailsender"}], "relations": [{"id": 1, "pid": 3, "prid": 1, "description": "Testvalue"}, {"id": 2, "pid": 3, "prid": 1, "description": "Testrelation 2"}, {"id": 3, "pid": 3, "prid": 1, "description": "\\tTestrelation 3"}, {"id": 4, "pid": 3, "prid": 1, "description": "Testrelation 4"}, {"id": 5, "pid": 3, "prid": 1, "description": "\\tTestrelation 5"}, {"id": 6, "pid": 3, "prid": 1, "description": "\\tTestrelation 6"}, {"id": 7, "pid": 3, "prid": 1, "description": "\\tTestrelation 7"}, {"id": 8, "pid": 3, "prid": 1, "description": "Testrelation 8"}, {"id": 9, "pid": 3, "prid": 1, "description": "\\tTestrelation 9"}, {"id": 10, "pid": 3, "prid": 1, "description": "Testrelation 10"}, {"id": 11, "pid": 3, "prid": 2, "description": "Testbeschreibung 1"}, {"id": 12, "pid": 3, "prid": 1, "description": "Testrelation 2"}, {"id": 13, "pid": 3, "prid": 1, "description": "Testrelation 2"}, {"id": 14, "pid": 6, "prid": 5, "description": "Sendet eine Email an den Empf\\u00e4nger"}]}, "appConf": {"initial_pw_duration": 24, "token_duration": 72, "pw_duration": 2160, "old_pw_count": 5, "configurable_specific_properties": ["sad", "testProperty"]}}
+        // Handle the response
+        this.setState({
+            pluginAssignment: data['program_plugin'],
+            appConfig: data['appConf'],
+            mappedPluginAssignment: transformPluginMappings(data['program_plugin']),
         })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            // Handle the response
-            this.setState({
-                pluginAssignment: data['program_plugin'],
-                appConfig: data['appConf'],
-                mappedPluginAssignment: transformPluginMappings(data['program_plugin']),
-            })
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+       
     }
 
     createNewRelation = () =>{
-        fetch('http://127.0.0.1:5000/createProgPlugRelation', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify({pid: this.state.selectedPlugin, prid: this.state.selectedRight, description: this.state.description})
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            let temp = this.state.pluginAssignment
-            temp['relations'].push({id: data['id'] ,pid: this.state.selectedPlugin, prid: this.state.selectedRight, description: this.state.description})
-            // Handle the response
-
-            this.setState({
-                pluginAssignment: temp,
-                mappedPluginAssignment: transformPluginMappings(temp),
-                selectedPlugin: 0,
-                selectedRight: 0,
-                description: '',
-                newRelation: false,
-            })
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        
     }
 
     createNewPR = () =>{
-        fetch('http://127.0.0.1:5000/createProgramRight', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify({name: this.state.newPRName})
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            let temp = this.state.pluginAssignment
-            temp['programsAndRights'].push({id: data['id'] ,name: this.state.newPRName})
-            // Handle the response
-
-            this.setState({
-                pluginAssignment: temp,
-
-                newPRName: '',
-                newPR: false,
-            })
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        
     }
 
     createNewUserProp = () => {
@@ -363,38 +262,7 @@ class AppManagement extends React.Component{
     }
 
     updateAppConfig = () =>{
-        fetch('http://127.0.0.1:5000/updateAppConfig', {
-            method: 'UPDATE',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify({appConfig: this.state.appConfig})
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then(() => {
-            // Handle the response
-            this.setState({
-                appConfigChanged: false,
-            })
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        
     }
 
     render(){

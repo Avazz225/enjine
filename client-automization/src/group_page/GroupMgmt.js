@@ -114,137 +114,23 @@ class GroupManager extends React.Component{
     }
 
     componentDidMount(){
-        fetch('http://127.0.0.1:5000/getGroups', {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            // Handle the response
-            if (data['pData'] !== 'f'){
-                this.setState({
-                    globalGroupData: data['global'],
-                    localGroupData: data['local'],
-                    onlyLocal: data['onlyLocal'],
-                    serverErrorMessage: ''
-                })
-            }
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        let data = {'global': [{'id': 1, 'name': 'test1', 'rights': null}, {'id': 2, 'name': 'globalGroup2', 'rights': null}, {'id': 3, 'name': 'globalGroup3', 'rights': null}, {'id': 4, 'name': 't4', 'rights': null}, {'id': 5, 'name': 't5', 'rights': null}, {'id': 6, 'name': 't6', 'rights': null}, {'id': 7, 'name': 'PL6', 'rights': null}, {'id': 8, 'name': 'test-ADM', 'rights': null}], 'local': [{'id': 1, 'global_id': 1, 'name': 't1', 'rights': null}, {'id': 2, 'global_id': 1, 'name': 't2', 'rights': null}, {'id': 3, 'global_id': 1, 'name': 't3', 'rights': null}, {'id': 4, 'global_id': 2, 'name': 't1', 'rights': null}, {'id': 5, 'global_id': 2, 'name': 't2', 'rights': null}, {'id': 6, 'global_id': 7, 'name': 'Admins', 'rights': null}, {'id': 7, 'global_id': 8, 'name': 'ADM-PL', 'rights': null}], 'onlyLocal': false}
+        if (data['pData'] !== 'f'){
+            this.setState({
+                globalGroupData: data['global'],
+                localGroupData: data['local'],
+                onlyLocal: data['onlyLocal'],
+                serverErrorMessage: ''
+            })
+        }
     }
 
     createGlobalGroup(){
 
-        let data={  type: 'global',
-                name: this.state.globGroupName
-            }
-
-        fetch('http://127.0.0.1:5000/addGroups', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify(data)
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            // Handle the response
-            let temp = this.state.globalGroupData
-            temp.push({name: this.state.globGroupName, id:data['id']})
-
-            this.setState({
-                globalGroupData: temp,
-                addGlobalGroup: false,
-                globGroupName: '',
-                serverErrorMessage: ''
-            })
-            
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
     }
 
     createLocalGroup(){
-        let data = {
-                type: 'local',
-                masterID: this.state.selectedID,
-                name: this.state.locGroupName
-                }
-
-        fetch('http://127.0.0.1:5000/addGroups', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify(data)
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            let temp = this.state.localGroupData
-            temp.push({name: this.state.locGroupName, id:data['id'], global_id: this.state.selectedID})
-
-            // Handle the response
-            this.setState({
-                addLocalGroup: false,
-                localGroupData: temp,
-                localGroupDataFiltered: temp.filter(obj => obj['global_id'] == this.state.selectedID),
-                locGroupName: ''
-            })
-            
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        
     }
 
     handleChange = (e) => {

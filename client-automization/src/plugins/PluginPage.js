@@ -66,12 +66,12 @@ class PlugInMgmt extends React.Component{
             filteredPluginData:[{id:0, 
                                 name:'...',
                                 params: {unknown: '...', unknown2: '...'},
-                                params_description: {unknown: 'None', unknown2: '...'},
+                                params_description: {unknown: 'null', unknown2: '...'},
                                 }],
             searchValue: '',
             selectedPlugIn: '...',
             selectedParams: {unknown: '...', unknown2: '...'},
-            selectedDescs: {unknown: 'None', unknown2: '...'},
+            selectedDescs: {unknown: 'null', unknown2: '...'},
             selectedID: 0,
         };
 
@@ -89,40 +89,14 @@ class PlugInMgmt extends React.Component{
     }
 
     componentDidMount(){
-        fetch('http://127.0.0.1:5000/getPlugIns', {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
+        let data = {'pData': [{'id': 6, 'name': 'gmail', 'params': {'recipient': null, 'CC-recipient': null, 'topic': null, 'text': null, 'replacementValues': null}, 'params_description': {'recipient': 'Der Empfänger der Email.', 'CC-recipient': 'Ein Nutzer der im CC erwähnt wird.', 'topic': 'Betreff der Email.', 'text': 'Der Text der Email.', 'replacementValues': 'Ersetzt Werte aus dem Emailtext.'}}]}
             // Handle the response
-            if (data['pData'] !== 'f'){
-                this.setState({
-                    pluginData: data['pData'],
-                    filteredPluginData: data['pData'],
-                })
-            }
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        if (data['pData'] !== 'f'){
+            this.setState({
+                pluginData: data['pData'],
+                filteredPluginData: data['pData'],
+            })
+        }
     }
 
     handleChange = (e) => {
@@ -151,41 +125,7 @@ class PlugInMgmt extends React.Component{
     }
 
     saveChanges(){
-        const vals = {
-            newConfig: this.state.selectedParams,
-            id: this.state.selectedID
-        };
-
-        fetch('http://127.0.0.1:5000/setPluginConfig', {
-            method: 'UPDATE',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify(vals)
-        })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-                return
-            } else {
-                throw new Error(response.status, response.json());
-            }
-        })
-        .then(() => {
-            // Handle the response
-            document.getElementById('accordeonInvisible').classList.remove('visible')
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+        
     }
 
     render(){

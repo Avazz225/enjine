@@ -16,71 +16,19 @@ class Login extends React.Component {
   
     handleSubmit = (e) => {
       e.preventDefault();
-  
-      const { identifier, password } = this.state;
-  
-      // Create an object with the user's credentials
-      const credentials = {
-        identifier: identifier,
-        password: password
-      };
-  
-      // Send the POST request to the backend
-      fetch('http://127.0.0.1:5000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-      })
-      .then((response) => {
-        // Check the response status
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.status);
-        }
-      })
-        .then((data) => {
-          // Handle the response
 
-          let token = data['token']['str']
-          let expires = data['token']['valid_until']
-          var d1 = new Date(Date.UTC(expires[0], expires[1]-1, expires[2], expires[3], expires[4], expires[5]))
-          let perms = data['permissions']
-          let remTime = data['remainingPwTime']
+      let token = "aTestTokenWhichContentIsIrrelevant"
+      let expires = [2023,12,31,23,59,59]
+      var d1 = new Date(Date.UTC(expires[0], expires[1]-1, expires[2], expires[3], expires[4], expires[5]))
+      let perms = {'sysadmin': 1}
 
-          // set a cookie containing the auth token and permissions in the local storage
-          setCookie(token, d1);
-          setLocal("userRights", perms);
-          
-
-          if (remTime['days']<14){
-            let hms = secondsToHMS(remTime['seconds'])
-            window.alert('Bitte ändere dein Passwort! Dein aktuelles ist nur noch '+remTime['days']+' Tag(e) und '+hms['h'] +' Stunde(n) '+ hms['m'] +' Minute(n) '+ hms['s'] +' Sekunde(n) gültig.' )
-            setLocal('remainingPWTimeWarn', true)
-          } else {
-            setLocal('remainingPWTimeWarn', false)
-          }
-
-          //reload the site
-          window.location.reload()
-        })
-        .catch((error) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({pwErrorMessage: 'Das eingegebene Passwort ist falsch.', unameErrorMessage: '', serverErrorMessage: ''})
-              } else if (error.message === '404') {
-                // Not found
-                this.setState({unameErrorMessage: 'Der eingegebene Anmeldename konnte nicht gefunden werden.', pwErrorMessage: '', serverErrorMessage: ''})
-              } else if (error.message === '403') {
-                // Forbidden (Password expired)
-                this.setState({serverErrorMessage: 'Das Passwort ist abgelaufen, bitte lass es zurücksetzen.', unameErrorMessage: '', pwErrorMessage: ''})
-              } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!', unameErrorMessage: '', pwErrorMessage: ''})
-              }
-        });
+      // set a cookie containing the auth token and permissions in the local storage
+      setCookie(token, d1);
+      setLocal("userRights", perms);
+      
+      //reload the site
+      window.location.reload()
+        
     };
   
     handleChange = (e) => {
@@ -128,6 +76,7 @@ class Login extends React.Component {
                       <center>
                           <button type="submit" className='btn Class1'>Login</button>
                           <br/>
+                          Das ist ein Dummy! Hier reicht ein Klick auf Login aus, um zum Programm zu gelangen.
                         <span className='error'>{this.state.serverErrorMessage}</span>
                       </center> 
                   </form>

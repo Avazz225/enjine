@@ -35,58 +35,6 @@ class PWChanger extends React.Component {
   
     handleSubmit = (e) => {
       e.preventDefault();
-  
-      const { oldPW, password } = this.state;
-  
-      // Create an object with the user's credentials
-      const credentials = {
-        oldpw: oldPW,
-        newpw: password,
-        admReset: 'False'
-      };
-  
-      // Send the POST request to the backend
-      fetch('http://127.0.0.1:5000/changepw', {
-        method: 'UPDATE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Auth-Header': getCookie('token')
-        },
-        body: JSON.stringify(credentials)
-      })
-      .then((response) => {
-        // Check the response status
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.status);
-        }
-      })
-        .then(() => {
-          // Display information
-          window.alert("Passwort erfolgreich geändert!")
-
-          // force logout
-          logout()
-          window.location.reload()
-          
-        })
-        .catch((error) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({oldPwWrongErrorMessage: 'Das alte Passwort ist falsch.', serverErrorMessage: ''});
-              } else if (error.message === '403') {
-                // Forbidden (Token expired)
-                window.alert('Der Anmeldetoken ist abgelaufen. Du wirst jetzt ausgeloggt.');
-                logout();
-              } else if (error.message === '409') {
-                // Conflict
-                this.setState({oldPwWrongErrorMessage: 'Das neue Passwort darf nicht mit einem Alten übereinstimmen.', serverErrorMessage: ''});
-              }else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!', oldPwWrongErrorMessage: ''});
-              }
-        });
     };
   
     handleChange = (e) => {

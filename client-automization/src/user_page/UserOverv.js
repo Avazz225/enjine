@@ -93,82 +93,17 @@ class UserTable extends React.Component{
     }
 
     async forcePwdReset(){
-        // Create an object with the required data
-        const credentials = {
-            id: this.state.selectedID,
-            admReset: 'true'
-        };
-    
-        // Send the POST request to the backend
-        fetch('http://127.0.0.1:5000/changepw', {
-            method: 'UPDATE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Auth-Header': getCookie('token')
-                },
-                body: JSON.stringify(credentials)
-            })
-            .then((response) => {
-                    // Check the response status
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error(response.status, response.json());
-                    }
-                }
-            )
-            .then((data) => {
-                // Display information
-                    window.alert("Passwort erfolgreich zurückgesetzt! Das neue temporäre Passwort ist: "+data['password'])
-                    this.togglePopUpVisiblility()
-                }
-            )
-            .catch((error, data) => {
-                if (error.message === '401') {
-                    // Insufficient rights
-                    setLocal('userRights', data['rights'])
-                } else {
-                    // Internal server error
-                    window.alert('Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!');
-                }
-            }
-        );
+        
     }
 
     async getItems(page){
-        await fetch('http://127.0.0.1:5000/getUsers', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Auth-Header': getCookie('token')
-            },
-            body: JSON.stringify({rowCount:this.state.elementsPerPage, start:(0 + ((parseInt(page)-1) * this.state.elementsPerPage))})
+        let data = {'res': [{'id': 1, 'active_account': 1, 'identifier': 'test'}, {'id': 2, 'active_account': 1, 'identifier': 'test1'}, {'id': 9, 'active_account': 1, 'identifier': 'testadmin'}], 'total': 3}
+        // Handle the response
+        this.setState({
+            userData: data['res'],
+            total: data['total']
         })
-        .then((response) => {
-            // Check the response status
-            if (response.ok) {
-            return response.json();
-            } else {
-            throw new Error(response.status, response.json());
-            }
-        })
-        .then((data) => {
-            // Handle the response
-            this.setState({
-                userData: data['res'],
-                total: data['total']
-            })
-        })
-        .catch((error, data) => {
-            if (error.message === '401') {
-                // Unauthorized
-                this.setState({serverErrorMessage: 'Unzureichende Rechte.'})
-                setLocal('userRights', data['rights'])
-            } else {
-                // Internal server error
-                this.setState({serverErrorMessage: 'Datenbankfehler, bitte kontaktiere den zuständigen Administrierenden!'})
-            }
-        });
+    
     }
 
     async setPage(number){
