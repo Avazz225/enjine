@@ -128,6 +128,7 @@ class UserTable extends React.Component{
             popUpVisible: !this.state.popUpVisible
         })
     }
+    
 
     render(){
         if (this.state.total === 0) return 
