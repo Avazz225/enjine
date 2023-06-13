@@ -70,8 +70,6 @@ instance/
 
 # serverless stuff:
 .serverless/
-package-lock.json
-package.json
 
 # Scrapy stuff:
 .scrapy
