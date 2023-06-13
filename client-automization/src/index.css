@@ -1,22 +1,21 @@
 :root{
   --primary-color: 0, 55, 117;
   --secondary-color: 121, 179, 59;
-  --text-color: 19, 19, 19;
-  --background-color: 243, 243, 243;
-  --static-black-color: 19, 19, 19;
-  --static-white-color: 243, 243, 243;
+  --text-color: 0, 0, 0;
+  --background-color: 256, 256, 256;
+  --static-black-color: 0, 0, 0;
+  --static-white-color: 256, 256, 256;
   --error-color: 209, 0, 0;
   --glassy: 0.05;
 }
 
 @media (prefers-color-scheme: dark) {
   :root{
-    --primary-color: 51, 130, 219;
-    --secondary-color: 121, 179, 59;
-    --text-color: 243, 243, 243;
-    --background-color: 19, 19, 19;
-    --static-black-color: 30, 30, 30;
-    --static-white-color: 243, 243, 243;
+    --secondary-color: 56, 84, 27;
+    --text-color: 256, 256, 256;
+    --background-color: 0, 0, 0;
+    --static-black-color: 15, 15, 15;
+    --static-white-color: 256, 256, 256;
     --glassy: 0.025;
   }
 }
