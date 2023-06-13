@@ -20,7 +20,7 @@ class Login extends React.Component {
       let token = "aTestTokenWhichContentIsIrrelevant"
       let expires = [2023,12,31,23,59,59]
       var d1 = new Date(Date.UTC(expires[0], expires[1]-1, expires[2], expires[3], expires[4], expires[5]))
-      let perms = {'sysadmin': 1}
+      let perms = {"applicationAdmin":0,"applicationGlobal":0,"groupAdmin":0,"groupGlobal":0,"logAdmin":0,"logGlobal":0,"pluginAdmin":0,"pluginGlobal":0,"processAdmin":0,"processGlobal":0,"rightAdmin":0,"rightGlobal":0,"rightLocal":0,"sysAdmin":1,"userAdmin":0,"userGlobal":0}
 
       // set a cookie containing the auth token and permissions in the local storage
       setCookie(token, d1);
