@@ -1,12 +1,12 @@
 function BtnClass1(props){
     return(
-        <button onClick={(e) => props.action(e)} className="btn Class1 green" name={props.name} disabled={(props.disabled)? true:false}>{props.text}</button>
+        <button onClick={(e) => props.action(e)} className="btn Class3 green noUnderline" name={props.name} disabled={(props.disabled)? true:false}>{props.text}</button>
     )
 }
 
 function BtnClass2(props){
     return(
-        <button onClick={(e) => props.action(e)} name={props.name} className="btn Class2 green" disabled={(props.disabled)? true:false}>{props.text}</button>
+        <button onClick={(e) => props.action(e)} name={props.name} className="btn Class3 green noUnderline" disabled={(props.disabled)? true:false}>{props.text}</button>
     )
 }
 

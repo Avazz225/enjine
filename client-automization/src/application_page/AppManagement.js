@@ -12,7 +12,6 @@ function AppTable(props){
                     <tr>
                         <th>Programm-/ Rechtename</th>
                         <th>Zugeordnetes Plugin</th>
-                        <th>Beschreibung</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,7 +110,6 @@ function NewRelation(props){
         <tr>
             <td><AutocompleteInput dataList={props.pluginAssignment.programsAndRights} onSelect={props.handleSelectRight}/></td>
             <td><AutocompleteInput dataList={props.pluginAssignment.plugins} onSelect={props.handleSelectPlugin}/></td>
-            <td><input type="text" name="description" onInput={props.handleInput} value={props.description}/></td>
             <td> <center><BtnClass2 text="Zuordnung erstellen" action={props.createNewRelation} disabled={(props.selectedPlugin === 0 | props.selectedRight === 0)} /><br/><BtnClass3 text="Abbrechen" action={props.toggleNewRelation}/></center> </td>
         </tr>
     )
@@ -144,7 +142,6 @@ const TableElement = ({data}) =>(
         <tr key={data['id']}>
             <td>{data['programAndRight']}</td>
             <td>{data['pluginName']}</td>
-            <td>{data['description']}</td>
         </tr>
     ))}
     </>
@@ -189,7 +186,7 @@ class AppManagement extends React.Component{
     }
 
     createNewPR = () =>{
-        
+    
     }
 
     createNewUserProp = () => {

@@ -1,12 +1,12 @@
 function HrefClass1(props){
     return(
-        <a href={props.action} className="href Class1 green">{props.text}</a>
+        <a href={props.action} className="href Class3 green noUnderline">{props.text}</a>
     )
 }
 
 function HrefClass2(props){
     return(
-        <a href={props.action} className="href Class2 green">{props.text}</a>
+        <a href={props.action} className="href Class3 green noUnderline">{props.text}</a>
     )
 }
 

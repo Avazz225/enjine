@@ -142,7 +142,7 @@ class UserTable extends React.Component{
                             <tr>
                                 <th>ID</th>
                                 <th>Anmeldename</th>
-                                <th>Accounttyp <Infobox/></th>
+                                <th>Accounttyp</th>
                                 <th>Optionen</th>
                             </tr>
                         </thead>
