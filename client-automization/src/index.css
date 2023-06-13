@@ -453,6 +453,7 @@ e
   min-height: calc(100vh - 7.8em);
   position: relative;
   min-width: 6em;
+  max-width: 6em;
   align-content: center;
   display: flex;
   flex-direction: column;

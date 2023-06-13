@@ -114,7 +114,8 @@ class GroupManager extends React.Component{
     }
 
     componentDidMount(){
-        let data = {'global': [{'id': 1, 'name': 'test1', 'rights': null}, {'id': 2, 'name': 'globalGroup2', 'rights': null}, {'id': 3, 'name': 'globalGroup3', 'rights': null}, {'id': 4, 'name': 't4', 'rights': null}, {'id': 5, 'name': 't5', 'rights': null}, {'id': 6, 'name': 't6', 'rights': null}, {'id': 7, 'name': 'PL6', 'rights': null}, {'id': 8, 'name': 'test-ADM', 'rights': null}], 'local': [{'id': 1, 'global_id': 1, 'name': 't1', 'rights': null}, {'id': 2, 'global_id': 1, 'name': 't2', 'rights': null}, {'id': 3, 'global_id': 1, 'name': 't3', 'rights': null}, {'id': 4, 'global_id': 2, 'name': 't1', 'rights': null}, {'id': 5, 'global_id': 2, 'name': 't2', 'rights': null}, {'id': 6, 'global_id': 7, 'name': 'Admins', 'rights': null}, {'id': 7, 'global_id': 8, 'name': 'ADM-PL', 'rights': null}], 'onlyLocal': false}
+        let data = {'global': [{'id': 7, 'name': 'Testfachbereich', 'rights': null}, {'id': 8, 'name': 'test-ADM', 'rights': null}], 
+        'local': [{'id': 1, 'global_id': 1, 'name': 't1', 'rights': null}, {'id': 2, 'global_id': 1, 'name': 't2', 'rights': null}, {'id': 3, 'global_id': 1, 'name': 't3', 'rights': null}, {'id': 4, 'global_id': 2, 'name': 't1', 'rights': null}, {'id': 5, 'global_id': 2, 'name': 't2', 'rights': null}, {'id': 6, 'global_id': 7, 'name': 'Admins', 'rights': null}, {'id': 7, 'global_id': 8, 'name': 'ADM-PL', 'rights': null}], 'onlyLocal': false}
         if (data['pData'] !== 'f'){
             this.setState({
                 globalGroupData: data['global'],

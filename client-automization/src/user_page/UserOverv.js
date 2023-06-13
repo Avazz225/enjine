@@ -43,11 +43,11 @@ function ResetPwd(props) {
                     : 
                     <></>
                 }
-                <a className='href Class3 zeroTB' target='blank' href={'/accountDetails?aid='+props.data['id']}>
+                {(false)?<a className='href Class3 zeroTB' target='blank' href={'/accountDetails?aid='+props.data['id']}>
                     <div className="iconWrapper">
                         <Icon icon={accountDetails} width={24}/>
                     </div>
-                </a>
+                </a>: <></>}
             </div>
         </td>
     )
@@ -97,7 +97,13 @@ class UserTable extends React.Component{
     }
 
     async getItems(page){
-        let data = {'res': [{'id': 1, 'active_account': 1, 'identifier': 'test'}, {'id': 2, 'active_account': 1, 'identifier': 'test1'}, {'id': 9, 'active_account': 1, 'identifier': 'testadmin'}], 'total': 3}
+        let data = {'res': [
+                        {'id': 1, 'active_account': 1, 'identifier': 'Beispielnutzer1'}, 
+                        {'id': 2, 'active_account': 1, 'identifier': 'Beispielnutzer2'}, 
+                        {'id': 8, 'active_account': 0, 'identifier': 'Beispielnutzer3'}, 
+                        {'id': 9, 'active_account': 1, 'identifier': 'testadmin'}], 
+                        
+                    'total': 3}
         // Handle the response
         this.setState({
             userData: data['res'],
