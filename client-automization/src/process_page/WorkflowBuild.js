@@ -6,6 +6,7 @@ import Sticker from './Sticker';
 import { getObjectById, timeout } from '../helpers';
 import { Icon } from '@iconify/react';
 import closeThick from '@iconify/icons-mdi/close-thick';
+import menuOpen from '@iconify/icons-mdi/menu-open';
 import { getCookie, setLocal } from '../helpers';
 
 function TempArrow(props){
@@ -26,6 +27,9 @@ class WorkflowBuilder extends React.Component{
             drag: false,
             previous: '',
             pluginAssignment:'',
+            configVisible: false,
+            usedPlugins: [],
+            pluginVars: {},
         };
 
         this.abortArrow = this.abortArrow.bind(this);
@@ -249,6 +253,12 @@ class WorkflowBuilder extends React.Component{
         });
     }
 
+    toggleConfigVisibility= () => {
+        this.setState({
+            configVisible: !this.state.configVisible
+        })
+    }
+
     render (){
         return(
             <> 
@@ -291,11 +301,32 @@ class WorkflowBuilder extends React.Component{
                             ))}
                             <EndPoint inboundConn={this.state.dragObjects[1].inboundConn}  maxInboundConn={1} onStop= {this.onStop} name={1} handleArrowFinish={this.handleArrowFinish} objectPosition={this.state.objectPositions[1]}/> 
                         </div>
+                        {(true)?<></>:<RightSideMenu 
+                            configVisible={this.state.configVisible} 
+                            toggleConfigVisibility={this.toggleConfigVisibility}
+                        />}
                     </div>
                 }
             </>
         )
     }
+}
+
+function RightSideMenu(props){
+    return(
+        <div className='absPos right'>
+            <div className='accordeonWrapper'>
+                <div className={(props.configVisible)?"accordeonElem visible content":"accordeonElem content"}>
+                    <div className='minHeight' onClick={props.toggleConfigVisibility}>
+                        <Icon icon={menuOpen} width={32} />
+                    </div>
+                    <div className='content'>
+                        <h2 className='oneLine noTopSpace'>Plugin Overrides</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default WorkflowBuilder;

@@ -43,11 +43,26 @@ code {
   position: absolute;
 }
 
+.absPos.right{
+  right: 0.5em;
+  top: 20%;
+  overflow: hidden;
+}
+
+.absPos.right .accordeonWrapper div div{
+  background-color: rgba(var(--static-black-color), 0.75);
+}
+
 .accordeonWrapper{
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: center;
+}
+
+.accordeonWrapper div .content{
+  padding: 0.5em;
+  margin: 0;
 }
 
 .accordeonElem{
@@ -60,6 +75,20 @@ code {
 .accordeonElem.visible{
   transform: scaleX(1);
   width: 50%;
+}
+
+.absPos.right .accordeonWrapper{
+  justify-content: flex-end;
+}
+
+.accordeonElem.content{
+  width: auto;
+  transform: scaleX(1) translateX(calc(100% - 1.25em));
+  display: flex;
+}
+
+.accordeonElem.visible.content{
+  transform: scaleX(1) translateX(calc(0% + 0.75em));
 }
 
 .BGLogoContainer{
@@ -145,6 +174,10 @@ img{
 
 .left{
   text-align: left;
+}
+
+.minHeight{
+  height: min-content;
 }
 
 .noTopSpace{

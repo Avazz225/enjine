@@ -21,7 +21,7 @@ def getProgs(token):
     
 def readProgs():
     """Reads available programs and assigned plugins."""
-    plugins = db_connector.read('plugin',['id','name'], returnType='all')
+    plugins = db_connector.read('plugin',['id','name', 'params'], returnType='all')
     programs = db_connector.read('program_right',['id','name'], returnType='all')
     relations = db_connector.read('program_right_plugin',['id','pid','prid','description'], returnType='all')
 
