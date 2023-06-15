@@ -146,4 +146,4 @@ def rightChecker(token:str, perms:list, simpleResponse: bool = True):
         else: 
             return {'result':True, 'perms': row}
     else: 
-        return {'id':id, 'rights':helpers.getRights(id)}
+        return {'result': 'a','id':id, 'rights':helpers.getRights(id)}

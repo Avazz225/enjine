@@ -9,18 +9,6 @@
   --glassy: 0.05;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root{
-    --primary-color: 51, 130, 219;
-    --secondary-color: 121, 179, 59;
-    --text-color: 243, 243, 243;
-    --background-color: 19, 19, 19;
-    --static-black-color: 30, 30, 30;
-    --static-white-color: 243, 243, 243;
-    --glassy: 0.025;
-  }
-}
-
 :root.dark {
   --primary-color: 51, 130, 219;
   --secondary-color: 121, 179, 59;
@@ -108,7 +96,7 @@ code {
   max-height: 95vh;
 }
 
-@media (prefers-color-scheme: light){
+:root.light{
   .BGLogoContainer{
     filter: invert(1);
     opacity: 0.04;
@@ -278,7 +266,7 @@ img{
   border-color: rgb(var(--secondary-color));
 }
 
-@media (prefers-color-scheme: light) {
+:root.light{
   .btn.Class2.green{
     color: rgb(var(--text-color));
   }
@@ -403,7 +391,7 @@ e
   border-radius: 8px;
 }
 
-@media (prefers-color-scheme: light){
+:root.light{
   .logoutBG{
     background-color: rgba(var(--static-black-color), 0.95);
   }
