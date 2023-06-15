@@ -1,4 +1,4 @@
-:root{
+:root, :root.light{
   --primary-color: 0, 55, 117;
   --secondary-color: 121, 179, 59;
   --text-color: 19, 19, 19;
@@ -19,6 +19,16 @@
     --static-white-color: 243, 243, 243;
     --glassy: 0.025;
   }
+}
+
+:root.dark {
+  --primary-color: 51, 130, 219;
+  --secondary-color: 121, 179, 59;
+  --text-color: 243, 243, 243;
+  --background-color: 19, 19, 19;
+  --static-black-color: 30, 30, 30;
+  --static-white-color: 243, 243, 243;
+  --glassy: 0.025;
 }
 
 body {
