@@ -7,6 +7,8 @@ import helpers
 
 def refreshController():
     """Coordinates refresh"""
+
+    #partially built using chatGPT
     existing = pluginManager.rPlugin(0, 1)['pData']
     pluginNames = readFileNames()
     pluginDict = {key: None for key in pluginNames}

@@ -123,6 +123,8 @@ def getRights(id) -> dict:
 
 #------------------------------------------------------------------------------
 #list management
+
+#partially built using chatGPT
 def remKeys(target: dict, comparision: dict) -> dict:
     """Removes all keys from target not present in comparision"""
     return {key: value for key, value in target.items() if key in comparision}
@@ -133,7 +135,7 @@ def rmDictFromList(dictList: list, key:str, value: str) -> list:
 
 def getDict(myList: list, key_to_match : str, value_to_match: str) -> dict:
     """Returns all dicts in a list where given key matches a specific value."""
-    return next((d for d in myList if d.get(key_to_match) == value_to_match), None)
+    return next((d for d in myList if str(d.get(str(key_to_match))) == str(value_to_match)), None)
 
 def rmDictsNotInList(dictList:list, key:str, value_list:list):
     """Removes all dicts from a list where the given key doesn't match any value in given list"""

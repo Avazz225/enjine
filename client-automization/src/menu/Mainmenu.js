@@ -1,11 +1,22 @@
 import { HrefClass1, HrefClass3 } from "../components/Href"
-import { getLocal, logout } from "../helpers"
+import { getLocal, logout, setLocal } from "../helpers"
 import { Icon } from '@iconify/react';
 import logoutIcon from '@iconify/icons-mdi/logout';
 import { BtnClass3 } from "../components/Btn";
+import lightMode from '@iconify/icons-material-symbols/light-mode';
+import darkMode from '@iconify/icons-material-symbols/dark-mode';
+import React from "react";
 
 function Mainmenu(){
     let perm = getLocal("userRights")
+    let scheme = getLocal('preferredScheme')
+
+    if (scheme === null){
+        scheme = fillInitialScheme()
+    }
+
+    setInitialScheme(scheme.scheme)
+
     return(
         <>
         <a href='/'>
@@ -31,21 +42,79 @@ function Mainmenu(){
     )
 }
 
-function LogOut(){
+class LogOut extends React.Component{
+
+    constructor(){
+        super();
+        this.state = {
+            scheme: getLocal('preferredScheme')
+        }
+        this.toggleDarkMode = this.toggleDarkMode.bind(this)
+    }
+
+    
+    toggleDarkMode() {
+        if (document.documentElement.classList.contains("light")) {
+            document.documentElement.classList.remove("light")
+            document.documentElement.classList.add("dark")
+            setLocal('preferredScheme', {scheme: 'dark'})
+            
+            this.setState({
+                scheme: {scheme: 'dark'}
+            })
+        } else if (document.documentElement.classList.contains("dark")) {
+            document.documentElement.classList.remove("dark")
+            document.documentElement.classList.add("light")
+            setLocal('preferredScheme', {scheme: 'light'})
+
+            this.setState({
+                scheme: {scheme: 'light'}
+            })
+        } else {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add("dark")
+            } else {
+                document.documentElement.classList.add("light")
+            }
+        }
+}
+
+    render() {
     let warn = getLocal('remainingPWTimeWarn')
     return(
-        <div className="logoutContainer href Class3 zeroTB">
-            <div className="iconWrapper">
-                <Icon icon={logoutIcon} width={24}/>
-            </div>
-            <div className="logoutSlave">
-                <div className="logoutBG">
-                    {(warn)? <HrefClass1 text="Passwort ändern" action='/pwmgmt'/>:<HrefClass3 text="Passwort ändern" noUnderline={true} action='/pwmgmt'/>}
-                    <BtnClass3 text="Abmelden" noUnderline={true} action={logout}/>
+        <div className="flexWrapper iconWrapper oneLine">
+            <Icon icon={(this.state.scheme.scheme === 'light')?lightMode:darkMode} width={24} onClick={this.toggleDarkMode}/>
+            <div className="logoutContainer href Class3 zeroTB">
+                <div>
+                    <Icon icon={logoutIcon} width={24}/>
+                </div>
+                <div className="logoutSlave">
+                    <div className="logoutBG">
+                        {(warn)? <HrefClass1 text="Passwort ändern" action='/pwmgmt'/>:<HrefClass3 text="Passwort ändern" noUnderline={true} action='/pwmgmt'/>}
+                        <BtnClass3 text="Abmelden" noUnderline={true} action={logout}/>
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    )}
+}
+
+function setInitialScheme(scheme){
+    if (scheme === 'light'){
+        document.documentElement.classList.add("light")
+    } else if (scheme === 'dark'){
+        document.documentElement.classList.add("dark")
+    }
+}
+
+function fillInitialScheme(){
+    console.log('ÄA')
+    let scheme = {scheme: 'light'}
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+            scheme = {scheme: 'dark'}
+        }
+    setLocal('preferredScheme', scheme)
+    return scheme
 }
 
 export default Mainmenu

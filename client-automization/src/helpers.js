@@ -74,12 +74,12 @@ function transformPluginMappings(data) {
 
 function getObjectById(list, filterId) {  
     for (let i = 0; i < list.length; i++) {
-      if (Number(list[i].id) === filterId) {
-        return list[i];
-      }
+        if (Number(list[i].id) === filterId) {
+            return list[i];
+        }
     }
     
     return {x:0, y:0}; // Wenn keine Übereinstimmung gefunden wurde
-  }
+}
 
 export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout, transformPluginMappings, getObjectById}

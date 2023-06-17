@@ -24,6 +24,7 @@ class WorkflowBuilder extends React.Component{
             dragObjects: this.props.dragObjects, 
             objectPositions: this.props.objectPositions,
             connections: this.props.connections,
+            pluginConfig: this.props.pluginConfig,
             drag: false,
             previous: '',
             pluginAssignment:'',
@@ -178,14 +179,38 @@ class WorkflowBuilder extends React.Component{
         }
     }
 
-    handleAppPluginToTask = (id, relatedPlugins) =>{
+    handleAppPluginToTask = (id, relatedPlugins, pluginConfig) =>{
         let temp = this.state.dragObjects
+        let pluginConfigs = this.state.pluginConfig
+
         const index = temp.findIndex(obj => obj.id === id);
         temp[index].relatedPlugins = relatedPlugins
+
+        const index2 = pluginConfigs.findIndex(obj => obj.id === id);
+
+        let confID = 0
+        try {confID = (Number(pluginConfigs[index2].configs[pluginConfigs[index2].configs.length - 1].id) + 1)}
+        catch {}
+
+        pluginConfigs[index2].configs.push({id: confID, pluginId: pluginConfig.id, pluginName: pluginConfig.name,config: pluginConfig.params})
+
         this.setState({
-            dragObjects: temp
+            dragObjects: temp,
+            pluginConfig: pluginConfigs,
         })
     } 
+
+    handleConfOverride = (value, taskID, configID, configKey) => {
+        let temp = this.state.pluginConfig
+
+        let taskId = temp.findIndex(obj => obj.id === taskID)
+        let configId = temp[taskId]['configs'].findIndex(obj => obj.id === configID)
+        
+        temp[taskId]['configs'][configId]['config'][configKey] = value
+        this.setState({
+            pluginConfig: temp,
+        })
+    }
 
     onStop = (e, ui) => {
         let temp = this.state.objectPositions
@@ -201,9 +226,12 @@ class WorkflowBuilder extends React.Component{
     onAddComponent = (e) => {
         let temp = this.state.dragObjects
         let objectPositions = this.state.objectPositions
+        let pluginConfig = this.state.pluginConfig
 
         objectPositions.push({id:(Number(temp[temp.length - 1].id) + 1), x: 0, y:0})
+        pluginConfig.push({id: (Number(temp[temp.length - 1].id) + 1), configs:[]})
         temp.push({id: (Number(temp[temp.length - 1].id) + 1) , name:'Task', type: e.target.name, relatedPlugins: [], inboundConn: 0, outboundConn: 0})
+        
         this.setState({
             dragObjects: temp,
             objectPositions: objectPositions,
@@ -211,12 +239,12 @@ class WorkflowBuilder extends React.Component{
     }
 
     saveProcess = () => {
-
         let data={
             processName: this.props.task,
             processObjects: this.state.dragObjects, 
             objectPositions: this.state.objectPositions,
             objectConnections: this.state.connections,
+            pluginConfig: this.state.pluginConfig,
         }
 
         fetch('http://127.0.0.1:5000/updateProcess', {
@@ -301,10 +329,13 @@ class WorkflowBuilder extends React.Component{
                             ))}
                             <EndPoint inboundConn={this.state.dragObjects[1].inboundConn}  maxInboundConn={1} onStop= {this.onStop} name={1} handleArrowFinish={this.handleArrowFinish} objectPosition={this.state.objectPositions[1]}/> 
                         </div>
-                        {(true)?<></>:<RightSideMenu 
+                        <RightSideMenu 
                             configVisible={this.state.configVisible} 
                             toggleConfigVisibility={this.toggleConfigVisibility}
-                        />}
+                            pluginConfig={this.state.pluginConfig}
+                            dragObjects={this.state.dragObjects}
+                            handleConfOverride={this.handleConfOverride}
+                        />
                     </div>
                 }
             </>
@@ -320,12 +351,68 @@ function RightSideMenu(props){
                     <div className='minHeight' onClick={props.toggleConfigVisibility}>
                         <Icon icon={menuOpen} width={32} />
                     </div>
-                    <div className='content'>
+                    <div className='content accordeonCh'>
                         <h2 className='oneLine noTopSpace'>Plugin Overrides</h2>
+                        <RightMapperByTask 
+                            dragObjects={props.dragObjects}
+                            pluginConfig={props.pluginConfig}
+                            handleConfOverride={props.handleConfOverride}
+                        />
                     </div>
                 </div>
             </div>
         </div>
+    )
+}
+
+function RightMapperByTask(props){
+    return(
+        <>
+            {props.pluginConfig.map((item) => (
+                <>
+                    <h3>{props.dragObjects[props.dragObjects.findIndex(obj => obj.id === item.id)].name}</h3>
+                    <RightMapperByAssignedPlugin 
+                        pluginConfig={item.configs}
+                        taskID = {item.id}
+                        handleConfOverride={props.handleConfOverride}
+                    />
+                </>
+            ))}
+        </>
+    )
+}
+
+function RightMapperByAssignedPlugin(props){
+    return(
+        <>
+            {props.pluginConfig.map((item) => (
+                <>
+                    <h4>PluginName: {item.pluginName}</h4>
+                    <RightMapperByAssignedPluginConfig 
+                        assignedPluginID={item.id}
+                        assignedPluginConfig={item.config}
+                        taskID = {props.taskID}
+                        handleConfOverride={props.handleConfOverride}
+                    />
+                </>
+            ))}
+        </>
+    )
+}
+
+function RightMapperByAssignedPluginConfig(props){
+    return(
+        <>
+            {Object.keys(props.assignedPluginConfig).map((item) => (
+                <>
+                    {item}<br/>
+                    <input 
+                        value={props.assignedPluginConfig[item]}
+                        onChange= {(e) => props.handleConfOverride(e.target.value, props.taskID, props.assignedPluginID, item)}
+                    /><br/>
+                </>
+            ))}
+        </>
     )
 }
 
