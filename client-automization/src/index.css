@@ -63,6 +63,11 @@ code {
   margin: 0;
 }
 
+.accordeonCh{
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
 .accordeonElem{
   transform: scaleX(0);
   width: 0;
@@ -451,6 +456,7 @@ e
   min-height: calc(100vh - 7.8em);
   position: relative;
   min-width: 6em;
+  max-width: 6em;
   align-content: center;
   display: flex;
   flex-direction: column;
