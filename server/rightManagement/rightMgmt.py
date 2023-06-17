@@ -140,6 +140,7 @@ def rightChecker(token:str, perms:list, simpleResponse: bool = True):
 
     row = db_connector.read('permission', perms, {'id': id}, 'one')
 
+    #partially built using chatGPT
     if any(value for value in row.values()):
         if simpleResponse:
             return True
