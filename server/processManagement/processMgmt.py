@@ -1,5 +1,6 @@
 from rightManagement import rightMgmt
 from database import db_connector
+from helpers import getDict
 import json
 
 def updateProcess(data, token):
@@ -22,6 +23,7 @@ def updateProcess(data, token):
         db_connector.update('process_template',{'process_objects': data['processObjects'], 
                                                 'object_positions':data['objectPositions'], 
                                                 'object_connections': data['objectConnections'],
+                                                'plugin_config': data['pluginConfig'],
                                                 'technical_process': technical_process,
                                                 },{"process_name": data['processName']})
         
@@ -31,15 +33,17 @@ def updateProcess(data, token):
 def build_list(data, interruptOnParallel:bool = False) -> list:
     """Builds a basic technical process object."""
 
+    #partially built using chatGPT
     process_objects = {str(obj['id']): obj for obj in data['processObjects']}
     connections = {conn['previous']: conn['next'] for conn in data['objectConnections']}
+    plugin_objects = {str(obj['id']): obj['configs'] for obj in data['pluginConfig']}
 
     def build_sublist(start_id, stop_id=None, interruptOnParallel = False):
         result = []
         current_id = start_id
         while current_id != '1' and current_id in connections and current_id != stop_id:
             obj = process_objects[current_id]
-            plugins = [{'pluginID': plugin['pluginID']} for plugin in obj['relatedPlugins']]
+            plugins = [{'pluginID': plugin['pluginID'], 'pluginConfig': getDict(plugin_objects[str(current_id)], 'pluginId', str(plugin['pluginID']))['config']} for plugin in obj['relatedPlugins']]
             sublist = {'id': len(result), 'type': obj['type'], 'plugins': plugins, 'name': obj['name']}
             if obj['type'] in ['parallel', 'exclusive'] and 'subPaths' in obj:
                 sublist['subPaths'] = []
@@ -145,4 +149,4 @@ def readProcessNames(perms) -> list:
 def readProcessConfig(perms, filter:str) -> list:
     """Handles read of process config.
         Perms are currently not used and just a preparation for future features."""
-    return db_connector.read('process_template', ['process_objects', 'object_positions', 'object_connections'], {'process_name': filter}, returnType='one')
+    return db_connector.read('process_template', ['process_objects', 'object_positions', 'object_connections', 'plugin_config'], {'process_name': filter}, returnType='one')

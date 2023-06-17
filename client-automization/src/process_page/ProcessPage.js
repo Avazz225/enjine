@@ -12,6 +12,7 @@ class ProcessPage extends React.Component{
             dragObjects: [{id:0, name:'Start', type:'start', relatedPlugins: [], inboundConn: 0, outboundConn: 0}, {id:1, name:'End', type:'end', relatedPlugins: [], inboundConn: 0, outboundConn: 0}], 
             objectPositions: [{id:0,x:0,y:0}, {id:1,x:0,y:60}],
             connections: [],
+            pluginConfig: [],
         };
 
     }
@@ -73,6 +74,7 @@ class ProcessPage extends React.Component{
                     dragObjects: data['processVars']['process_objects'],
                     objectPositions: data['processVars']['object_positions'],
                     connections: data['processVars']['object_connections'],
+                    pluginConfig: data['processVars']['plugin_config'],
                     selectedProcess: e.target.innerText,
                 })
             } else {
@@ -102,6 +104,7 @@ class ProcessPage extends React.Component{
                     dragObjects={this.state.dragObjects} 
                     objectPositions={this.state.objectPositions} 
                     connections={this.state.connections} 
+                    pluginConfig={this.state.pluginConfig}
                 />
             }
             </>

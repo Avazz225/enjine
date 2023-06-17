@@ -5,6 +5,7 @@ import accountIcon from '@iconify/icons-mdi/account';
 import menuIcon from '@iconify/icons-mdi/menu';
 import { BtnClass2, BtnClass3 } from "../components/Btn";
 import AutocompleteInput from "../components/AutoCompleteInput";
+import { getObjectById } from "../helpers";
 
 class DraggableComp extends React.Component{
     //executes a task, max 1 in- and output for correct handling. Alternations possible at own risk.
@@ -63,9 +64,11 @@ class DraggableComp extends React.Component{
         catch {}
         temp.push({id: id, pluginID: this.getPid(), referenceID: this.state.selectedRelation})
 
-        console.log(temp)
+        let pluginConfig = getObjectById(this.state.pluginAssignment.plugins, this.getPid())
 
-        this.props.handleAppPluginToTask(this.state.objectID, temp)
+        console.log(pluginConfig)
+
+        this.props.handleAppPluginToTask(this.state.objectID, temp, pluginConfig)
         this.setState({
             referencedPluginData: temp,
             addNewRelation: false,
