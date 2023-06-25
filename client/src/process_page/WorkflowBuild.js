@@ -347,7 +347,7 @@ function RightSideMenu(props){
     return(
         <div className='absPos right'>
             <div className='accordeonWrapper'>
-                <div className={(props.configVisible)?"accordeonElem visible content":"accordeonElem content"}>
+                <div className={(props.configVisible)?"accordeonElem alwaysDark visible content":"accordeonElem alwaysDark content"}>
                     <div className='minHeight' onClick={props.toggleConfigVisibility}>
                         <Icon icon={menuOpen} width={32} />
                     </div>

@@ -1,11 +1,12 @@
 import React from 'react'
-import { setLocal, getCookie } from '../helpers';
+import { setLocal, getCookie, timeout } from '../helpers';
 import { Icon } from '@iconify/react';
 import lockReset from '@iconify/icons-mdi/lock-reset';
 import accountDetails from '@iconify/icons-mdi/account-details';
 import Pagy from '../components/Pagy';
 import { BtnClass2, BtnClass3 } from '../components/Btn';
 import informationIcon from '@iconify/icons-mdi/information';
+import UserDetails from './UserDetails';
 
 function ConfirmationPopUp(props){
     return(
@@ -43,24 +44,24 @@ function ResetPwd(props) {
                     : 
                     <></>
                 }
-                <a className='href Class3 zeroTB' target='blank' href={'/accountDetails?aid='+props.data['id']}>
+                <button className='href Class3 zeroTB' target='blank' onClick={() => props.toggleSidePopUp(props.data['id'])}>
                     <div className="iconWrapper">
                         <Icon icon={accountDetails} width={24}/>
                     </div>
-                </a>
+                </button>
             </div>
         </td>
     )
 }
 
-const TableElement = ({data, togglePopUpVisiblility}) =>( 
+const TableElement = ({data, togglePopUpVisiblility, toggleSidePopUp}) =>( 
     <>
     {data.map(data =>(
         <tr key={data['id']}>
             <td>{data['id']}</td>
             <td>{data['identifier']}</td>
             <td>{(data['active_account'] === 1)?'Aktiv':'Passiv'}</td>
-            <ResetPwd data={data} togglePopUpVisiblility={togglePopUpVisiblility} />
+            <ResetPwd data={data} togglePopUpVisiblility={togglePopUpVisiblility} toggleSidePopUp={toggleSidePopUp} />
         </tr>
     ))}
     </>
@@ -78,13 +79,17 @@ class UserTable extends React.Component{
           elementsPerPage: 30,
           selectedID: 0,
           selectedUser: '',
-          popUpVisible: false
+          popUpVisible: false,
+          targetID: 0,
+          sidePopUp: false,
+          renderSide: false,
         };
 
         this.forcePwdReset = this.forcePwdReset.bind(this)
         this.getItems = this.getItems.bind(this)
         this.setPage = this.setPage.bind(this)
         this.togglePopUpVisiblility = this.togglePopUpVisiblility.bind(this)
+        this.toggleSidePopUp = this.toggleSidePopUp.bind(this)
     }
 
     // Send the GET request to the backend after mount of component
@@ -188,6 +193,29 @@ class UserTable extends React.Component{
         })
     }
 
+    async toggleSidePopUp(id){
+        let oldState = this.state.sidePopUp
+
+        if (!oldState){
+            this.setState({
+                renderSide: true,
+                targetID: id,
+            })
+            await timeout(0)
+        }
+
+        this.setState({
+            sidePopUp: !oldState,
+        })
+
+        if (oldState){
+            await timeout(500)
+            this.setState({
+                renderSide: false,
+            })
+        }
+    }
+
     render(){
         if (this.state.total === 0) return 
         return(
@@ -206,10 +234,15 @@ class UserTable extends React.Component{
                             </tr>
                         </thead>
                         <tbody>
-                            <TableElement data={this.state.userData} togglePopUpVisiblility={this.togglePopUpVisiblility}/>
+                            <TableElement 
+                                data={this.state.userData} 
+                                togglePopUpVisiblility={this.togglePopUpVisiblility}
+                                toggleSidePopUp = {this.toggleSidePopUp}
+                            />
                         </tbody>
                     </table>
                 </div>
+                {(this.state.renderSide)?<UserDetails configVisible={this.state.sidePopUp} targetID={this.state.targetID} />:<></>}
             </div>
         )
     }

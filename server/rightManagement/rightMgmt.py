@@ -23,6 +23,17 @@ def approveUserGet(token:str):
 
     return rightChecker(token, ['sysAdmin', 'userAdmin', 'userGlobal', 'groupAdmin', 'groupGlobal'], False)
 
+def approveUserUpd(token:str): 
+    """Checks whether a user is allowed to see users. 
+    
+    Allowed groups:
+    - sysAdmin
+    - userAdmin
+    - userGlobal
+    """
+
+    return rightChecker(token, ['sysAdmin', 'userAdmin', 'userGlobal'], False)
+
 def approvePropertyManagement(token:str): 
     """Checks whether a user is allowed to see properties. 
     

@@ -49,6 +49,7 @@ code {
 
 .absPos.right .accordeonWrapper div div{
   background-color: rgba(var(--static-black-color), 0.75);
+  border-radius: 8px;
 }
 
 .accordeonWrapper{
@@ -88,6 +89,16 @@ code {
   width: auto;
   transform: scaleX(1) translateX(calc(100% - 1.25em));
   display: flex;
+  color: rgb(var(--static-white-color));
+}
+
+.accordeonElem.content.user{
+  transform: scaleX(1) translateX(calc(100% + 1em));
+}
+
+.accordeonElem.alwaysDark input{
+  color: rgb(var(--static-white-color));
+  border-color: rgb(var(--static-white-color));
 }
 
 .accordeonElem.visible.content{
@@ -164,7 +175,6 @@ input{
   border-radius: 0.25em;
   padding: 0.25em;
   margin: 0em 0.25em;
-  color: rgb(var(--text-color));
 }
 
 input.number{
