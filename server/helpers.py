@@ -74,7 +74,7 @@ def toDictList(rowSet : list, pullParams: list, returnType: str) -> list[dict]:
 
 def toStr(unsafeString: str) -> str:
     """Safely converts user inputs to strings and removes forbidden characters. Writes logs if forbidden chars are found."""
-    regex = r"[^\s._0-9a-zA-z,\+*!?§$\"%&#-_;:.äöüÄÖÜß@€/\[\]]+\{\}"
+    regex = r"[^\s._0-9a-zA-z,\+*!?§$\"%&#\-_;:.äöüÄÖÜß@€/\[\]]+\{\}"
     subst = " "
 
     if type(unsafeString) == list:

@@ -43,7 +43,7 @@ def checkCreds(identifier: str, pw: str):
 def getToken(id: int) -> str:
     """Generates auth token and stores it to db"""
     # usage of id in the token ensures that every token is unique
-    token = str(id) + ''.join(random.choice(string.ascii_letters + string.digits) for i in range(30-len(str(id))))
+    token = str(id) +'.'+''.join(random.choice(string.ascii_letters + string.digits) for i in range(29-len(str(id))))
     tokenexpires = helpers.getDate(db_connector.read('client_config1',['token_duration'], returnType='one')['token_duration'])
     db_connector.update('user', {'token': token, 'token_valid_until': tokenexpires}, {'id': id})
 

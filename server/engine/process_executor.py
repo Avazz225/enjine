@@ -5,7 +5,7 @@ import helpers
 def executeProcess(processName:str, executor:int, processID:int=0, processParams:dict={}) -> None:
     """Handles process execution."""
     if processID!=0:
-       processID = newProcess(processName, executor, processParams)
+        processID = newProcess(processName, executor, processParams)
     else:
         currentStep = resumeProcess(processName, executor, processID)
         
@@ -21,15 +21,15 @@ def executeProcess(processName:str, executor:int, processID:int=0, processParams
             if step[1]=='mandatory':
                 #errorhandling for stopped process
                 db_connector.create('event_log', {
-                                            'processID': processID,
+                                            'process_id': processID,
                                             'type':'error',
                                             'description':'Process execution stopped due to mandatory plugin failure. Process: %s' % (processName)
                                             })
                 
-                db_connector.update('activeProcess', { 
+                db_connector.update('active_process', { 
                                             'status': 'stopped',
                                             'progress':currentStep,
-                                            }, {'processID': processID})
+                                            }, {'process_id': processID})
                 break
             else:
                 failedSteps.append(step[0])
@@ -37,15 +37,15 @@ def executeProcess(processName:str, executor:int, processID:int=0, processParams
         #check if step is marked as asynchronous and requires user action
         if step[1]=='async':
             db_connector.create('event_log', {
-                                        'processID': processID,
+                                        'process_id': processID,
                                         'type':'information',
                                         'description':'Process waiting for external action. Process: %s ' % (processName)
                                         })
             
-            db_connector.update('activeProcess', { 
+            db_connector.update('active_process', { 
                                         'status': 'waiting',
                                         'progress':currentStep,
-                                        }, {'processID': processID})
+                                        }, {'process_id': processID})
             break
 
     finishProcess(processID, processName, failedSteps, currentStep)
@@ -64,13 +64,13 @@ def newProcess(processName:str, executor: int, processParams: dict) -> int:
     
     #create process configuration with parameters assigned at process start
     db_connector.create('processConfig', {
-                                    'processID': processID,
+                                    'process_id': processID,
                                     'params': processParams
                                     })
     
     #write to log
     db_connector.create('event_log', {
-                                    'processID': processID,
+                                    'process_id': processID,
                                     'type':'information',
                                     'description':'Process execution started. Process: %s Responsible userID: %s ' % (processName, executor)
                                     })
@@ -80,11 +80,11 @@ def newProcess(processName:str, executor: int, processParams: dict) -> int:
 def resumeProcess(processName:str, executor: int, processID: int) -> int:
     """Resumes a previously started process."""
     ##load last progressstate to resume execution
-    current_step = db_connector.read('acticeProcess',['progress'],{'processID':processID}, 'one')['progress']
+    current_step = db_connector.read('acticeProcess',['progress'],{'process_id':processID}, 'one')['progress']
 
     #write to log
     db_connector.create('event_log', {
-                                    'processID': processID,
+                                    'process_id': processID,
                                     'type':'information',
                                     'description':'Process execution resumed. Process: %s Responsible userID: %s ' % (processName, executor)
                                     })
@@ -95,20 +95,20 @@ def finishProcess(processID: int, processName: str, failedSteps:list, currentSte
     """Finishes a process execution object in the database."""
     #write log for finished process    
     db_connector.create('event_log', {
-                                        'processID': processID,
+                                        'process_id': processID,
                                         'type':'information',
                                         'description':'Process execution finished. Process: %s Failed non-mandatory steps: %s ' % (processName, helpers.toStr(failedSteps))
                                         })
 
     #finish process in database (active process)
     if len(failedSteps) == 0:
-        db_connector.update('activeProcess', { 
+        db_connector.update('active_process', { 
                                             'status': 'finished',
                                             'progress':currentStep,
                                             }, {'processID': processID})
 
     else: 
-        db_connector.update('activeProcess', { 
+        db_connector.update('active_process', { 
                                             'status': 'finished with failures',
                                             'progress':currentStep,
-                                            }, {'processID': processID})
+                                            }, {'process_id': processID})

@@ -56,10 +56,6 @@ def addGr():
 def getPr():
     return appManager.getProgs(request.headers.get('Auth-Header'))
 
-@app.route('/addPrograms', methods = ['POST'])
-def addPr():
-    return appManager.addProg(request.json, request.headers.get('Auth-Header'))
-
 @app.route('/createProgPlugRelation', methods = ['POST'])
 def createRel():
     return appManager.createPRPR(request.json, request.headers.get('Auth-Header'))
@@ -83,6 +79,14 @@ def getProcesses():
 @app.route('/getProcess', methods = ['GET'])
 def getProcess():
     return processMgmt.getProcess(request.args.get('target'),request.headers.get('Auth-Header'))
+
+@app.route('/getUserProps', methods = ['GET'])
+def getSpecUser():
+    return userFunc.getUser(request.args.get('user'),request.headers.get('Auth-Header'))
+
+@app.route('/updateUserProps', methods = ['UPDATE'])
+def updSpecUser():
+    return userFunc.updUser(request.json,request.headers.get('Auth-Header'))
 
 @app.after_request
 def after_request(response):
