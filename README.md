@@ -1,8 +1,7 @@
 # enjine
 bachelorthesis product
 
+This (delivery_bachelor) is the branch for the product of my bachelorthesis at the time of delivery. This branch will not be modified as it is designated for archiving.
+"MVC" branches are for MV testing and will not be modifyed as well.
 
-This is the code of a product of my bachelorthesis.
-
-
-"MVC" branches are for MV testing. I messed up the chars and I am to lazy to change the names and rebuild CI/CD pipelines...
+Please note that other branches may be created, updated and deleted at any time.
