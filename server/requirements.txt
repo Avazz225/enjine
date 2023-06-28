@@ -1,0 +1,5 @@
+Flask==2.2.2
+Flask_Cors==3.0.10
+mysql_connector_repackaged==0.3.1
+python-dotenv==1.0.0
+bcrypt==4.0.0
