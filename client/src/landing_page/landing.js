@@ -9,7 +9,7 @@ function Landing(){
             <HrefClass2 text="Logdateien einsehen"/>
             <br/><br/>
             <h1 className="blue">Übersicht</h1>
-            Monitoring Stuff I guess @Maxim Schmaxim
+            -Platzhalter für noch nicht definierte Inhalte- 
         </div>
     )
 }
