@@ -49,7 +49,9 @@ def changeSelf(data: json, token:str):
 
     row = db_connector.read('user', ['id','password', 'token_valid_until', 'pw_history'], {'token': token, 'active_account': 1}, 'one')
 
-    if not row or helpers.dateComparisionTdy(row['token_valid_until'][1:(len(row['token_valid_until'])-1)].split(',')):
+    print(row['token_valid_until'])
+
+    if not row or helpers.dateComparisionTdy(row['token_valid_until']):
         response = json.dumps({'message':'Token expired'})
         return response, 403
 
@@ -69,7 +71,7 @@ def changeSelf(data: json, token:str):
             response = json.dumps({'message':'Historic and new password similar.'})
             return response, 409
 
-    row2 = db_connector.read('client_config',['pw_duration', 'old_pw_count'],{'id': 1}, 'one')
+    row2 = db_connector.read('client_config1',['pw_duration', 'old_pw_count'],{'id': 1}, 'one')
     duration = row2['pw_duration']
 
     count = row2['old_pw_count']

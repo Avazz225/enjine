@@ -108,7 +108,6 @@ function setInitialScheme(scheme){
 }
 
 function fillInitialScheme(){
-    console.log('ÄA')
     let scheme = {scheme: 'light'}
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
             scheme = {scheme: 'dark'}
