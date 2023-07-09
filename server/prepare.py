@@ -2,7 +2,7 @@ import sys
 import subprocess
 
 # implement pip as a subprocess:
-"""subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
 'bcrypt==4.0.0'])
 
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
@@ -27,7 +27,7 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 'mysql-connector-python==8.0.29'])
 
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
-'mysqlclient==2.1.1'])"""
+'mysqlclient==2.1.1'])
 
 from account import account
 from database import db_connector
