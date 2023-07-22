@@ -1,5 +1,4 @@
 from database import db_connector
-import helpers
 import json
 from rightManagement import rightMgmt
 

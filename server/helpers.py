@@ -137,6 +137,6 @@ def getDict(myList: list, key_to_match : str, value_to_match: str) -> dict:
     """Returns all dicts in a list where given key matches a specific value."""
     return next((d for d in myList if str(d.get(str(key_to_match))) == str(value_to_match)), None)
 
-def rmDictsNotInList(dictList:list, key:str, value_list:list):
+def rmDictsNotInList(dictList:list, key:str, value_list:list) -> list:
     """Removes all dicts from a list where the given key doesn't match any value in given list"""
     return [d for d in dictList if d.get(key) in value_list]

@@ -26,7 +26,7 @@ function Mainmenu(){
             <div className="mainSlave">
                 <HrefClass3 text="Dashboard" noUnderline={true} action='/'/>
 
-                {(perm['sysAdmin']===1|perm["userAdmin"]===1|perm["userGlobal"]===1)?<HrefClass3 text="Nutzerverwaltung" noUnderline={true} action='/usermgmt?s=1'/>:<></>}
+                {(perm['sysAdmin']===1|perm["userAdmin"]===1|perm["userGlobal"]===1)?<HrefClass3 text="Nutzendenverwaltung" noUnderline={true} action='/usermgmt?s=1'/>:<></>}
                 {(perm['sysAdmin']===1|perm["processAdmin"]===1|perm["processGlobal"]===1)?<HrefClass3 text="Aktive Prozesse" noUnderline={true} action='/activeprocesses'/>:<></>}
                 {(perm['sysAdmin']===1|perm["processAdmin"]===1|perm["processGlobal"]===1)?<HrefClass3 text="Prozessverwaltung" noUnderline={true} action='/processmgmt'/>:<></>}
                 
