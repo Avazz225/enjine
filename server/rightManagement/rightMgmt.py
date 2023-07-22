@@ -24,7 +24,18 @@ def approveUserGet(token:str):
     return rightChecker(token, ['sysAdmin', 'userAdmin', 'userGlobal', 'groupAdmin', 'groupGlobal'], False)
 
 def approveUserUpd(token:str): 
-    """Checks whether a user is allowed to see users. 
+    """Checks whether a user is allowed to update users. 
+    
+    Allowed groups:
+    - sysAdmin
+    - userAdmin
+    - userGlobal
+    """
+
+    return rightChecker(token, ['sysAdmin', 'userAdmin', 'userGlobal'], False)
+
+def approveUserCre(token:str): 
+    """Checks whether a user is allowed to create a new user. 
     
     Allowed groups:
     - sysAdmin

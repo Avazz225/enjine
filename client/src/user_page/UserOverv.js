@@ -6,6 +6,7 @@ import accountDetails from '@iconify/icons-mdi/account-details';
 import Pagy from '../components/Pagy';
 import { BtnClass2, BtnClass3 } from '../components/Btn';
 import informationIcon from '@iconify/icons-mdi/information';
+import accountGroup from '@iconify/icons-mdi/account-group';
 import UserDetails from './UserDetails';
 
 function ConfirmationPopUp(props){
@@ -31,7 +32,7 @@ function Infobox(){
     )
 }
 
-function ResetPwd(props) {
+function BtnSet(props) {
     return(
         <td>
             <div className='flexWrapper horCenter'>
@@ -42,13 +43,22 @@ function ResetPwd(props) {
                         </div>
                     </button>
                     : 
-                    <></>
+                    <div className='btn Class3 zeroTB disabled'>
+                        <div className="iconWrapper">
+                            <Icon icon={lockReset} width={24}/>
+                        </div>
+                    </div>
                 }
                 <button className='href Class3 zeroTB' target='blank' onClick={() => props.toggleSidePopUp(props.data['id'])}>
                     <div className="iconWrapper">
                         <Icon icon={accountDetails} width={24}/>
                     </div>
                 </button>
+                <a className='href Class3 zeroTB' href={'/groupModify?u='+props.data['id']}>
+                    <div className="iconWrapper">
+                        <Icon icon={accountGroup} width={24}/>
+                    </div>
+                </a>
             </div>
         </td>
     )
@@ -61,7 +71,7 @@ const TableElement = ({data, togglePopUpVisiblility, toggleSidePopUp}) =>(
             <td>{data['id']}</td>
             <td>{data['identifier']}</td>
             <td>{(data['active_account'] === 1)?'Aktiv':'Passiv'}</td>
-            <ResetPwd data={data} togglePopUpVisiblility={togglePopUpVisiblility} toggleSidePopUp={toggleSidePopUp} />
+            <BtnSet data={data} togglePopUpVisiblility={togglePopUpVisiblility} toggleSidePopUp={toggleSidePopUp} />
         </tr>
     ))}
     </>
@@ -221,7 +231,7 @@ class UserTable extends React.Component{
         return(
             <div className="content">
                 <ConfirmationPopUp forcePwdReset={this.forcePwdReset} ident={this.state.selectedUser} togglePopUpVisiblility={this.togglePopUpVisiblility} popUpVisible={this.state.popUpVisible} />
-                <h1 className='blue noTopSpace'>Nutzerverwaltung</h1>
+                <h1 className='blue noTopSpace'>Nutzendenverwaltung</h1>
                 <div className='centered'>
                     <Pagy currentPage={this.state.currentPage} elementCount={this.state.total} elementPerPage={this.state.elementsPerPage} setPage={this.setPage} />
                     <table>

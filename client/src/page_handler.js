@@ -12,6 +12,7 @@ import PlugInMgmt from './plugins/PluginPage';
 import GroupManager from './group_page/GroupMgmt';
 import AppManagement from './application_page/AppManagement';
 import ProcessPage from './process_page/ProcessPage';
+import UserCreator from './user_page/UserCreator';
 
 function PageHandler(){
     let x = getCookie('token')
@@ -31,6 +32,7 @@ function LoggedIn(){
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<Landing />} />
+                    <Route path='/createUser' element={<UserCreator />} />
                     <Route path='/groupmgmt' element={<GroupManager />} />
                     <Route path='/pluginmgmt' element={<PlugInMgmt />} />
                     <Route path='/processmgmt' element={<ProcessPage />} />

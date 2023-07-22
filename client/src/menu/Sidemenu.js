@@ -1,4 +1,5 @@
 import { BtnClass3 } from "../components/Btn"
+import { HrefClass3 } from "../components/Href"
 import { getCookie, setLocal } from "../helpers"
 
 function Menu(){
@@ -10,6 +11,7 @@ function Menu(){
                 Aktionen
             </center>
             {(loc === '/pluginmgmt')?<BtnClass3 text='Neue Plugins suchen' action={refreshPlugInLib} />: <></>}
+            {(loc.substring(0,9) === '/usermgmt')?<HrefClass3 text='Neuen Nutzenden anlegen' action={'/createUser'} />: <></>}
         </div>
     )
 }
