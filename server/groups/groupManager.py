@@ -21,7 +21,7 @@ def getGroups(token:str):
 
 def rGroups(rights:dict, token:str):
     """Reads groups from database"""
-    if not bool(rights['sysAdmin']) and not bool(rights['groupAdmin']): filtered = True
+    if not bool(rights['sysAdmin']) and not bool(rights['groupAdmin']) and not bool(rights['userAdmin']): filtered = True
     else: filtered = False
 
     groupData = readGroupData(token)
@@ -34,7 +34,10 @@ def readGroupData(token: str) -> dict:
     """Executes reads on database"""
     glo = db_connector.read('global_group', ['id','name','rights'], {}, 'all')
     loc = db_connector.read('local_group', ['id','global_id','name','rights'], {}, 'all')
-    fil = db_connector.read('user', ['global_groups'], {'token': token}, 'all')[0]['global_groups'].replace('[','').replace(']','').split(',')
+    try:
+        fil = db_connector.read('user', ['global_groups'], {'token': token}, 'all')[0]['global_groups'].replace('[','').replace(']','').split(',')
+    except:
+        fil = []
     return {'global': glo, 'local': loc, 'filter': fil}
 
 def addGroups(data, token):

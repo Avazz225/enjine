@@ -82,4 +82,54 @@ function getObjectById(list, filterId) {
     return {x:0, y:0}; // Wenn keine Übereinstimmung gefunden wurde
 }
 
-export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout, transformPluginMappings, getObjectById}
+function getListDelta(list1, list2, filter){
+    //list1 = base
+    //list2 = list substracted from list 1
+    if (!Array.isArray(list1) || !Array.isArray(list2)) {
+        return list1
+      }
+    
+      let difference = list1.filter(item1 => !list2.some(item2 => item1[filter] === item2[filter]));
+    
+      return difference;
+}
+
+function filterListByGlobalId(list1, list2) {
+
+    if (!Array.isArray(list1) || !Array.isArray(list2)) {
+      return []
+    }
+  
+    let idsList2 = list2.map(item => item.id);
+    let filteredList = list1.filter(item => idsList2.includes(item.global_id));
+
+    return filteredList;
+}
+
+function sortByKey(list, key) {
+    if (!Array.isArray(list)) {
+      return list
+    }
+  
+    list.sort((a, b) => {
+      if (a[key] < b[key]) {
+        return -1;
+      } else if (a[key] > b[key]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  
+    return list;
+}
+
+function removeElementById(list, arg, filter) {
+    if (!Array.isArray(list)) {
+      return list
+    }
+
+    return list.filter(item => item[arg] !== filter);
+}
+
+export {getCookie, getLocal, logout, secondsToHMS, setCookie, setLocal, filterJsonArray, timeout, transformPluginMappings, getObjectById, getListDelta, filterListByGlobalId, sortByKey, removeElementById}

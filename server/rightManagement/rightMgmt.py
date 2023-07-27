@@ -78,9 +78,11 @@ def approveGroupGet(token:str):
     Allowed groups:
     - sysAdmin
     - groupAdmin
-    - groupGlobal"""
+    - groupGlobal
+    - userAdmin
+    - userGlobal"""
 
-    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal'], False)
+    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal', 'userAdmin', 'userGlobal'], False)
 
 def approveGroupAdd(token:str):
     """Checks whether a user is allowed to add groups. 

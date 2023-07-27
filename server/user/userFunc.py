@@ -60,3 +60,40 @@ def updUser(data, token):
         db_connector.update('user',{'specific_properties':json.dumps(data['props']['specific_properties'])}, {'id':data['id']})
         response = json.dumps({'message':'Successful'})
         return response, 200
+    
+def getGroups(target, token):
+    """Handles reading of a specific user account."""
+    #check if the user has rights to execute the opration
+    r = rightMgmt.approveUserGet(token)
+
+    #if not: create warning in logs, return error message and rights
+    if type(r['result']) != bool:
+        db_connector.create('event_log', {
+                                        'type':'warning',
+                                        'description':'Illegal access detected. User with id %s tried to get list of users' % (r['id'])
+                                        })
+        response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
+        return response, 401
+    else:
+        return rUserGR(target)
+    
+def rUserGR(targetID=0):
+    return db_connector.read('user', ['identifier', 'specific_properties', 'global_groups','local_groups'],{'id': targetID}, 'one'), 200
+
+def updGroups(data, token):
+    """Handles reading of a specific user account."""
+    #check if the user has rights to execute the opration
+    r = rightMgmt.approveUserUpd(token)
+
+    #if not: create warning in logs, return error message and rights
+    if type(r['result']) != bool:
+        db_connector.create('event_log', {
+                                        'type':'warning',
+                                        'description':'Illegal access detected. User with id %s tried to get list of users' % (r['id'])
+                                        })
+        response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
+        return response, 401
+    else:
+        db_connector.update('user',{'global_groups':json.dumps(data['global']), 'local_groups':json.dumps(data['local'])}, {'id':data['id']})
+        response = json.dumps({'message':'Successful'})
+        return response, 200

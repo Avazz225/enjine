@@ -81,7 +81,7 @@ function LocalGroupAdd(props){
 const LocalMapper = ({data}) =>( 
     <>
     {data.map((data) =>(
-        <div key={data['id']} className="closedBubble oneLine">{data['name']}</div>
+        <div key={data['id']} className="closedBubble oneLine preventSelect">{data['name']}</div>
     ))}
     </>
 )

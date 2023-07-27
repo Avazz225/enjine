@@ -88,6 +88,14 @@ def getSpecUser():
 def updSpecUser():
     return userFunc.updUser(request.json,request.headers.get('Auth-Header'))
 
+@app.route('/getUserGroups', methods = ['GET'])
+def getUserGroups():
+    return userFunc.getGroups(request.args.get('user'),request.headers.get('Auth-Header'))
+
+@app.route('/updateUserGroups', methods = ['UPDATE'])
+def updUserGroups():
+    return userFunc.updGroups(request.json,request.headers.get('Auth-Header'))
+
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
