@@ -80,9 +80,13 @@ def approveGroupGet(token:str):
     - groupAdmin
     - groupGlobal
     - userAdmin
-    - userGlobal"""
+    - userGlobal
+    - rightAdmin
+    - rightGlobal
+    - rightLocal
+    """
 
-    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal', 'userAdmin', 'userGlobal'], False)
+    return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal', 'userAdmin', 'userGlobal','rightAdmin', 'rightGlobal', 'rightLocal'], False)
 
 def approveGroupAdd(token:str):
     """Checks whether a user is allowed to add groups. 
@@ -94,6 +98,16 @@ def approveGroupAdd(token:str):
 
     return rightChecker(token, ['sysAdmin', 'groupAdmin', 'groupGlobal'], False)
 
+def approveGroupRight(token:str):
+    """Checks whether a user is allowed to add groups. 
+    
+    Allowed groups:
+    - sysAdmin
+    - rightAdmin
+    - rightGlobal
+    - rightLocal"""
+
+    return rightChecker(token, ['sysAdmin', 'rightAdmin', 'rightGlobal', 'rightLocal'], False)
 
 def approveProgGet(token:str):
     """Checks whether a user is read application data.
@@ -104,9 +118,12 @@ def approveProgGet(token:str):
     - applicationGlobal
     - processAdmin
     - processGlobal
+    - rightAdmin
+    - rightGlobal
+    - rightLocal
     """
 
-    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal', 'processAdmin', 'processGlobal'], False)
+    return rightChecker(token, ['sysAdmin', 'applicationAdmin', 'applicationGlobal', 'processAdmin', 'processGlobal','rightAdmin', 'rightGlobal', 'rightLocal'], False)
 
 def approveProgRelCreate(token:str):
     """Checks whether a user is allowed to create new relations between programs/rights and plugins. 
@@ -169,6 +186,6 @@ def rightChecker(token:str, perms:list, simpleResponse: bool = True):
         if simpleResponse:
             return True
         else: 
-            return {'result':True, 'perms': row}
+            return {'result':True, 'perms': row, 'id': id}
     else: 
         return {'result': 'a','id':id, 'rights':helpers.getRights(id)}

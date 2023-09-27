@@ -1,8 +1,8 @@
+import json
 from rightManagement import rightMgmt
 from database import db_connector
-import json
 
-def getProgs(token):
+def getProgs(token, onlyProgs = False):
     """Handles read of available programs and rights"""
     #check if the user has rights to execute the opration
     r = rightMgmt.approveProgGet(token)
@@ -17,15 +17,19 @@ def getProgs(token):
         return response, 401
     
     else: 
+        if onlyProgs: return json.dumps({"program_plugin":readProgs(onlyProgs)}), 200
         return json.dumps({"program_plugin":readProgs(), "appConf": readAppConf(r['perms'])}), 200
     
-def readProgs():
+def readProgs(smallResp = False):
     """Reads available programs and assigned plugins."""
-    plugins = db_connector.read('plugin',['id','name', 'params'], returnType='all')
-    programs = db_connector.read('program_right',['id','name'], returnType='all')
-    relations = db_connector.read('program_right_plugin',['id','pid','prid','description'], returnType='all')
+    if not smallResp:
+        plugins = db_connector.read('plugin',['id','name', 'params'], returnType='all')
+        programs = db_connector.read('program_right',['id','name'], returnType='all')
+        relations = db_connector.read('program_right_plugin',['id','pid','prid','description'], returnType='all')
 
-    return {'plugins':plugins, 'programsAndRights': programs, 'relations': relations}
+        return {'plugins':plugins, 'programsAndRights': programs, 'relations': relations}
+    else:
+        return db_connector.read('program_right',['id','name'], returnType='all')
 
 def readAppConf(perms):
     """Read application configuration from database."""

@@ -27,7 +27,7 @@ def changePwd(data: json, token:str):
 def changeAdm(id:int):
     """Handles change of passwords if it is initiated by an admin."""
     row = db_connector.read('user', ['id','pw_history', 'password'], {'id': id, 'active_account': 1}, 'one')
-    row2 = db_connector.read('client_config',['initial_pw_duration', 'old_pw_count'],{'id': 1}, 'one')
+    row2 = db_connector.read('client_config1',['initial_pw_duration', 'old_pw_count'],{'id': 1}, 'one')
 
     try: history = row['pw_history'][1:(len(row['pw_history'])-1)].split(',')
     except: history = []

@@ -1,5 +1,5 @@
 import React from "react";
-import { filterListByGlobalId, getCookie, getListDelta, getObjectById, removeElementById, setLocal, sortByKey } from "../helpers";
+import { filterListByGlobalId, getCookie, getListDelta, getObjectById, removeElementById, setLocal, sortByKey, getLocal } from "../helpers";
 import { BtnClass1, BtnClass2 } from "../components/Btn";
 import { useSearchParams } from "react-router-dom";
 
@@ -23,6 +23,7 @@ class UserGroupMgmt extends React.Component{
             edited: false,
             serverErrorMessage: '',
             saveErrorMessage: '',
+            editMode: false,
         };
 
         this.getParentGroup = this.getParentGroup.bind(this)
@@ -32,6 +33,7 @@ class UserGroupMgmt extends React.Component{
         this.rmLocalGroup = this.rmLocalGroup.bind(this)
         this.reloadUser = this.reloadUser.bind(this)
         this.saveChanges = this.saveChanges.bind(this)
+        this.toggleEditMode = this.toggleEditMode.bind(this)
     }
 
     async componentDidMount(){
@@ -67,6 +69,11 @@ class UserGroupMgmt extends React.Component{
             }
         });
 
+        let edit = getLocal('userEditMode')
+        if (edit === null){
+            setLocal('userEditMode', false)
+            edit = false
+        }
 
         await fetch('http://127.0.0.1:5000/getUserGroups?user='+this.state.targetID, {
             method: 'GET',
@@ -92,6 +99,7 @@ class UserGroupMgmt extends React.Component{
                 identifier: data['identifier'],
                 globalGroups: data['global_groups'],
                 localGroups: data['local_groups'],
+                editMode: edit,
             })
         })
         .catch((error, data) => {
@@ -153,7 +161,6 @@ class UserGroupMgmt extends React.Component{
             localGroups: sortByKey(list, 'name'),
             edited: true,
         })
-
     }
 
     rmLocalGroup(id){
@@ -161,7 +168,6 @@ class UserGroupMgmt extends React.Component{
             localGroups: removeElementById(this.state.localGroups ,'id' ,parseInt(id)),
             edited: true,
         })
-
     }
 
     saveChanges(){
@@ -171,13 +177,13 @@ class UserGroupMgmt extends React.Component{
             'Content-Type': 'application/json',
             'Auth-Header': getCookie('token')
             },
-            body: JSON.stringify({id: this.state.targetID, global: this.state.globalGroups, local: this.state.localGroups})
+            body: JSON.stringify({id: this.state.targetID, global: this.state.globalGroups, local: this.state.localGroups, editMode: this.state.editMode})
         })
 
         .then((response) => {
             // Check the response status
             if (response.ok) {
-                this.setState({edited: false})
+                this.setState({edited: false, saveErrorMessage: '',})
                 return
             } else {
                 throw new Error(response.status, response.json());
@@ -195,11 +201,19 @@ class UserGroupMgmt extends React.Component{
         });
     }
 
+    toggleEditMode(){
+        setLocal('userEditMode', !this.state.editMode)
+        this.setState({
+            editMode: !this.state.editMode,
+        })
+    }
+
     render(){
         return(
             <div className='content'>
                 <h1 className="blue noTopSpace">Nutzendenverwaltung</h1>
-                {this.state.serverErrorMessage}
+                <span className="error">{this.state.serverErrorMessage}</span>
+                <EditMode editMode={this.state.editMode} toggleEditMode={this.toggleEditMode} />
                 <h2>Gruppenverwaltung für {this.state.identifier} (ID: {this.state.targetID})</h2>
                 <GlobalGroups assigned={this.state.globalGroups} available={getListDelta(this.state.availableGroups.global, this.state.globalGroups, 'id')} addGroup={this.addGlobalGroup} rmGroup={this.rmGlobalGroup} />
                 {
@@ -207,8 +221,8 @@ class UserGroupMgmt extends React.Component{
                     <LocalGroups assigned={this.state.localGroups} available={getListDelta(filterListByGlobalId(this.state.availableGroups.local, this.state.globalGroups), this.state.localGroups, 'id')} getParentGroup={this.getParentGroup} addGroup={this.addLocalGroup} rmGroup={this.rmLocalGroup} />:
                     <h4>Weise eine globale Gruppe zu, um Lokale hinzuzufügen.</h4>
                 }
-                {this.state.saveErrorMessage}<br/>
-                {(this.state.edited)?<Buttons reloadUser={this.reloadUser} save={this.saveChanges} />:<></>}
+                <span className="error">{this.state.saveErrorMessage}</span><br/>
+                {(this.state.edited)?<Buttons reloadUser={this.reloadUser} save={this.saveChanges} editMode={this.state.editMode} />:<></>}
             </div>
         )
     }
@@ -217,9 +231,28 @@ class UserGroupMgmt extends React.Component{
 function Buttons(props){
     return(
         <div className="centered">
-            <BtnClass1 text='Änderungen speichern' action={() => props.save()}/>
+            <BtnClass1 text={(props.editMode)?'Änderungen speichern (kein On-/Offboarding!)':'Änderungen speichern'} action={() => props.save()}/>
             <BtnClass2 text='Änderungen verwerfen' action={() => props.reloadUser()} />
         </div>
+    )
+}
+
+function EditMode(props){
+    return(
+        <>
+        <div className="flexWrapper">
+            Bearbeitungsmodus:
+            <div className="spacer"/>
+            <label class="switch">
+                <input type="checkbox" checked={props.editMode} onClick={() => props.toggleEditMode()}/>
+                <span class="slider red round"/>
+            </label> 
+        </div>
+            {(props.editMode)?
+                <span className="error">Achtung! Änderungen haben keine Auswirkungen!</span>:
+                <></>
+            }
+        </> 
     )
 }
 

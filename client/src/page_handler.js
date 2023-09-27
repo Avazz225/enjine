@@ -14,6 +14,7 @@ import AppManagement from './application_page/AppManagement';
 import ProcessPage from './process_page/ProcessPage';
 import UserCreator from './user_page/UserCreator';
 import UserGroup from './user_page/UserGroupMgmt';
+import RightManager from './right_page/RightMgmt';
 
 function PageHandler(){
     let x = getCookie('token')
@@ -40,6 +41,7 @@ function LoggedIn(){
                     <Route path='/processmgmt' element={<ProcessPage />} />
                     <Route path='/programmgmt' element={<AppManagement />} />
                     <Route path='/pwmgmt' element={<PWChanger />} />
+                    <Route path='/rightmgmt' element={<RightManager />} />
                     <Route path='/usermgmt' element={<UserTable />} />
                     <Route path='/*' element={<NotFound />} />
                 </Routes>

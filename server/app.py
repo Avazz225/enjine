@@ -52,9 +52,14 @@ def getGr():
 def addGr():
     return groupManager.addGroups(request.json, request.headers.get('Auth-Header'))
 
+@app.route('/updGroupRights', methods = ['UPDATE'])
+def addRToGr():
+    return groupManager.updGroupRights(request.json, request.headers.get('Auth-Header'))
+
 @app.route('/getPrograms', methods = ['GET'])
 def getPr():
-    return appManager.getProgs(request.headers.get('Auth-Header'))
+    if request.args.get('smallResp') == 'true':  return appManager.getProgs(request.headers.get('Auth-Header'), True)
+    else: return appManager.getProgs(request.headers.get('Auth-Header'))
 
 @app.route('/createProgPlugRelation', methods = ['POST'])
 def createRel():

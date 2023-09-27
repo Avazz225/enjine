@@ -823,6 +823,10 @@ input:checked + .slider {
   background-color: rgb(var(--primary-color));
 }
 
+input:checked + .slider.red {
+  background-color: rgb(var(--error-color));
+}
+
 input:focus + .slider {
   box-shadow: 0 0 1px rgb(var(--primary-color));
 }

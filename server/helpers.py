@@ -110,7 +110,7 @@ def getRandomPassword(length:int) -> str:
 def getRights(id) -> dict:
     """Reads assigned rights for user"""
     return db_connector.read('permission', 
-                               ['sysAdmin', 
+                                ['sysAdmin', 
                                 'rightAdmin', 'rightGlobal', 'rightLocal',
                                 'pluginAdmin', 'pluginGlobal',
                                 'processAdmin', 'processGlobal',
@@ -118,8 +118,8 @@ def getRights(id) -> dict:
                                 'logAdmin', 'logGlobal',
                                 'groupAdmin', 'groupGlobal',
                                 'applicationAdmin', 'applicationGlobal'], 
-                               {'id': id}, 
-                               'one')
+                                {'id': id}, 
+                                'one')
 
 #------------------------------------------------------------------------------
 #list management
@@ -140,3 +140,23 @@ def getDict(myList: list, key_to_match : str, value_to_match: str) -> dict:
 def rmDictsNotInList(dictList:list, key:str, value_list:list) -> list:
     """Removes all dicts from a list where the given key doesn't match any value in given list"""
     return [d for d in dictList if d.get(key) in value_list]
+
+def subtractLists(list1: list, list2: list) -> list:
+    """Removes all items from list1 present in list2"""
+    result = [item for item in list1 if item not in list2]
+    return result
+
+def filterDicts(dicts_list: list, filter_ids_list: list, key: str) -> list:
+    """Only returns values from dicts_list where a given key has an occurence in filter_ids_list"""
+    if not filter_ids_list:
+        return dicts_list
+    filtered_list = [d for d in dicts_list if d.get(key) in [f.get(key) for f in filter_ids_list]]
+    return filtered_list
+
+def mergeDictLists(list1: list, list2: list) -> list:
+    """Merges given lists into one prevents duplicates"""
+    if not type(list2) == list:
+        return list1
+    merged_list = list1.copy()
+    merged_list.extend(item for item in list2 if item not in merged_list)
+    return merged_list

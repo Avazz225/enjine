@@ -1,7 +1,9 @@
 from rightManagement import rightMgmt
 from database import db_connector
+from engine import delta_object
 import json
 import helpers
+import threading
 
 def getGroups(token:str):
     """Handles reading of group data."""
@@ -66,3 +68,26 @@ def addLocal(data):
     """Adds a local group to the database."""
     id = db_connector.create('local_group', {'name': data['name'], 'global_id': data['masterID']})
     return {'message': 'Successful','id': id}
+
+def updGroupRights(data, token):
+    """Handles creation of new groups."""
+    #check if the user has rights to execute the opration
+    r = rightMgmt.approveGroupRight(token)
+
+    #if not: create warning in logs, return error message and rights
+    if type(r['result']) != bool:
+        db_connector.create('event_log', {
+                                        'type':'warning',
+                                        'description':'Illegal access detected. User with id %s tried to get list of plugins.' % (r['id'])
+                                        })
+        response = json.dumps({'message':'Insufficient rights.','rights':r['rights']})
+        return response, 401
+    
+    oldRights = db_connector.read(data['type'] + '_group', ['rights'], {'id':data['metadata']['id']})
+    thread = threading.Thread(target=delta_object.createDeltaFromRights(oldRights, data['metadata']['rights'], r['id'], data['metadata']['id'], data['type']))
+    thread.start()
+    
+    db_connector.update(data['type'] + '_group', {'rights': json.dumps(data['metadata']['rights'])}, {'id': data['metadata']['id']})
+
+    response = json.dumps({'message':'Successful'})
+    return response, 200   
